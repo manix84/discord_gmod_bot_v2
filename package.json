@@ -1,0 +1,40 @@
+{
+  "name": "discord_muter_bot_v2",
+  "version": "0.1.0",
+  "description": "A new Discord bot, to rule them all, for Discord Muter",
+  "main": "web.js",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/manix84/discord_gmod_bot_v2.git"
+  },
+  "contributors": [
+    {
+      "name": "Rob Taylor",
+      "email": "manix84@gmail.com",
+      "url": "https://github.com/manix84"
+    },
+    {
+      "name": "Pepich"
+    }
+  ],
+  "engines": {
+    "node": "12.0.x",
+    "npm": "6.9.x"
+  },
+  "scripts": {
+    "start": "start",
+    "test": "run-s test:*",
+    "test:lint": "eslint"
+  },
+  "devDependencies": {
+    "eslint": "^7.29.x"
+  },
+  "dependencies": {
+    "cors": "^2.8.x",
+    "discord.js": "^12.5.x",
+    "express": "^4.17.x",
+    "mysql": "^2.18.x",
+    "npm-run-all": "^4.1.5"
+  }
+}
