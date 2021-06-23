@@ -7,6 +7,8 @@ const { nanoid } = require('nanoid');
 const express = require('express');
 const cors = require('cors');
 
+require('./discord');
+
 const app = express();
 app.use(cors());
 app.use(express.json());

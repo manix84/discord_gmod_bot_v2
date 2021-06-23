@@ -6,10 +6,9 @@ bot.on('ready', () => {
   console.log(`Logged in as ${bot.user.tag}!`);
 });
 
-bot.on('interaction', async interaction => {
-  if (!interaction.isCommand()) return;
-  if (interaction.commandName === 'ping') {
-    await interaction.reply('Pong!');
+bot.on('message', (message) => {
+  if (message.content.startsWith('ping!')) {
+    message.channel.send('pong!');
   }
 });
 
