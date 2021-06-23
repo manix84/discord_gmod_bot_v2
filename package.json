@@ -30,8 +30,9 @@
   "scripts": {
     "start": "node .",
     "start:watch": "nodemon .",
-    "test": "run-s semistandard jest",
+    "test": "semistandard && jest",
     "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
     "lint": "semistandard --verbose | snazzy",
     "lint:fix": "semistandard --fix"
   },
