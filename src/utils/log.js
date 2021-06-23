@@ -28,7 +28,7 @@ const info = (...msgs) => {
 
 const fail = (...msgs) => {
   if (!DEBUG) return;
-  console.info(chalk.red(...msgs));
+  console.log(chalk.red(...msgs));
 };
 
 const br = () => {
