@@ -75,4 +75,3 @@ describe('Logs.js', () => {
     expect(console.error).toHaveBeenCalledWith(chalk.red('test'));
   });
 });
-
