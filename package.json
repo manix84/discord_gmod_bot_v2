@@ -15,7 +15,9 @@
       "url": "https://github.com/manix84"
     },
     {
-      "name": "Pepich"
+      "name": "Pepich",
+      "email": "admin@pepich.de",
+      "url": "https://github.com/pepich"
     }
   ],
   "engines": {
