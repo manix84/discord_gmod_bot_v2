@@ -44,7 +44,7 @@ Implications:
 
 Additional info not in database but relevant:
 ### User object:
-  - Muted status (fetched from Discord when requested)
+  - Muted status (fetched from Discord when needed)
 
 # API:
 ### GET /
@@ -85,9 +85,21 @@ Conflict with errors 403/404:
 
 ### POST /servers/\$UID/ttt/users/\$Steam_ID
   - 200: If the user is not currently connected, the database will be updated accordingly and the mute status applied when the user joins VC. Returns the updated user object
-*ALTERNATIVELY:*
+
+Example payload:
+```json
+// Dedicated "action" tag, allows to potentially add more actions later on
+{"action":"mute", "reason":"killed", "duration":-1}
+{"action":"mute", "reason":"killed", "duration":120}
+{"action":"unmute", "reason":"end of round"}
+// Alternatively deducting the action from the duration, 0 meaning unmute:
+{"reason":"killed", "duration":-1}
+{"reason":"killed", "duration":120}
+{"reason":"end of round", "duration":0}
+```
+*Alternative option for responses (I don't really like this though):*
 ### POST /servers/\$UID/ttt/users/\$Steam_ID
-*Basically ruled out already:*
+
   - 200: If the user is currently connected to the voicechat. Returns the updated user object
   - 409/422/500/503 (?): If the user is not currently connected to the voicechat  
   Technically any of the status codes would work, we just gotta choose one:
@@ -96,12 +108,64 @@ Conflict with errors 403/404:
     - 500: Internal server error - Generic internal server error. Would rather use a dedicated code for this, than the generic 500
     - 503: Service unavailable - While the user is not connected to the voicechat, this is not available.  
 
+Example payload:
+```json
+// Dedicated "action" tag, allows to potentially add more actions later on
+{"action":"mute", "reason":"killed", "duration":-1}
+{"action":"mute", "reason":"killed", "duration":120}
+{"action":"unmute", "reason":"end of round"}
+// Alternatively deducting the action from the duration, 0 meaning unmute:
+{"reason":"killed", "duration":-1}
+{"reason":"killed", "duration":120}
+{"reason":"end of round", "duration":0}
+```
 *Generally I'd prefer the first approach here, as it is more robust, and also prevents a user from avoiding a mute by disconnecting from the voicechat before the mute getting applied.*
 
 ### GET /servers/\$UID/discord/
   - 200: Miscellanious statistics about the Discord voicechat
 
 ### GET /servers/\$UID/discord/users/
-  - 200: List of (partial) user objects that are currently connected to the Discord voicechat. Steam_IDs are exluded.
+  - 200: List of (partial) user objects that are currently connected to the Discord voicechat. Steam_IDs are exluded unless the users have been seen on the server before (see next for security considerations).
 
-*Draft, to be completed...*
+### GET /servers/\$UID/discord/users/\$Discord_ID
+  - 200: A (partial) user object (Steam ID excluded unless the user was previously connected to the TTT server before. See security considerations.)
+  -> This would require to keep track of which servers a user has joined before, but I find this sensible to prevent harvesting Steam+Discord ID connections. A ratelimit should be imposed on registering users for a server (e.g. max 100 unique steam IDs per 72h period, and max 100 unique concurrent IDs by doing a rolling append). Possibly have to implement a user-API key to make circumventing this more difficult/impossible
+
+### POST /servers/\$UID/discord/users/\$Discord_ID
+  - 200: If the user is not currently connected, the database will be updated accordingly and the mute status applied when the user joins VC. Returns the updated user object
+
+Example payload:
+```json
+// Dedicated "action" tag, allows to potentially add more actions later on
+{"action":"mute", "reason":"killed", "duration":-1}
+{"action":"mute", "reason":"killed", "duration":120}
+{"action":"unmute", "reason":"end of round"}
+// Alternatively deducting the action from the duration, 0 meaning unmute:
+{"reason":"killed", "duration":-1}
+{"reason":"killed", "duration":120}
+{"reason":"end of round", "duration":0}
+```
+*Alternative option for responses (I don't really like this though):*
+### POST /servers/\$UID/discord/users/\$Discord_ID
+
+  - 200: If the user is currently connected to the voicechat. Returns the updated user object
+  - 409/422/500/503 (?): If the user is not currently connected to the voicechat  
+  Technically any of the status codes would work, we just gotta choose one:
+    - 409: Conflict - The request was made with an assertion that is (no longer) true: TTT server assumes that the user is in VC, but the user is not connected.
+    - 422: Unprocessable entity - The request made cannot be processed, but it was not malformed. I'd personally prefer the other status codes (especially as this is meant for WebDAV).
+    - 500: Internal server error - Generic internal server error. Would rather use a dedicated code for this, than the generic 500
+    - 503: Service unavailable - While the user is not connected to the voicechat, this is not available.  
+
+Example payload:
+```json
+// Dedicated "action" tag, allows to potentially add more actions later on
+{"action":"mute", "reason":"killed", "duration":-1}
+{"action":"mute", "reason":"killed", "duration":120}
+{"action":"unmute", "reason":"end of round"}
+// Alternatively deducting the action from the duration, 0 meaning unmute:
+{"reason":"killed", "duration":-1}
+{"reason":"killed", "duration":120}
+{"reason":"end of round", "duration":0}
+```
+*Generally I'd prefer the first approach here, as it is more robust, and also prevents a user from avoiding a mute by disconnecting from the voicechat before the mute getting applied.*
+
