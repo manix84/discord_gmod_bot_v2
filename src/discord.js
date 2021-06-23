@@ -25,7 +25,9 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
   }
 });
 
-bot.login(process.env.DISCORD_TOKEN);
+if (process.env.NODE_ENV !== 'test') {
+  bot.login(process.env.DISCORD_TOKEN);
+}
 
 module.exports = {
   bot
