@@ -2,7 +2,7 @@
   "name": "discord_muter_bot_v2",
   "version": "0.1.0",
   "description": "A new Discord bot, to rule them all, for Discord Muter",
-  "main": "web.js",
+  "main": "src/app.js",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -23,7 +23,7 @@
     "npm": "6.9.x"
   },
   "scripts": {
-    "start": "start",
+    "start": "node src/app.js",
     "test": "run-s test:*",
     "lint": "standard './src/**/*.js'"
   },
