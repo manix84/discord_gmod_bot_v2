@@ -25,4 +25,37 @@ describe('Test basic endpoints', () => {
     await request(app).post('/servers/<UID>/users/<UID>/<COMMAND>')
       .expect(200)
   })
+
+  // POST /servers/<UID>/users/<UID>/mute 200 | 403 | 404
+  test('POST /servers/<UID>/users/<UID>/<VALID COMMANDS>', async () => {
+    await request(app).post('/servers/<UID>/users/<UID>/mute')
+      .expect(200)
+      .then(response =>
+        response.body.command === 'mute'
+      )
+
+    await request(app).post('/servers/<UID>/users/<UID>/unmute')
+      .expect(200)
+      .then(response =>
+        response.body.command === 'unmute'
+      )
+
+    await request(app).post('/servers/<UID>/users/<UID>/deafen')
+      .expect(200)
+      .then(response =>
+        response.body.command === 'deafen'
+      )
+
+    await request(app).post('/servers/<UID>/users/<UID>/undeafen')
+      .expect(200)
+      .then(response =>
+        response.body.command === 'undeafen'
+      )
+
+    await request(app).post('/servers/<UID>/users/<UID>/invalid')
+      .expect(200)
+      .then(response =>
+        response.body.command === false
+      )
+  })
 })
