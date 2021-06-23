@@ -7,6 +7,7 @@ describe('Test basic endpoints', () => {
     await request(app).get('/')
       .expect(200);
   });
+
   // GET /invite -> 200
   test('GET /invite', async () => {
     await request(app).get('/invite')
