@@ -2,7 +2,7 @@
   "name": "discord_muter_bot_v2",
   "version": "0.1.0",
   "description": "A new Discord bot, to rule them all, for Discord Muter",
-  "main": "src/app.js",
+  "main": "server.js",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -22,12 +22,15 @@
     "node": "12.0.x",
     "npm": "6.9.x"
   },
+  "standard": {
+    "env": [ "jest" ]
+  },
   "scripts": {
-    "start": "node src/app.js",
-    "start-dev": "nodemon src/app.js",
-    "lint": "standard './src/**/*.js'",
-    "test": "run-s lint test:*",
-    "test:jest": "jest"
+    "start": "node .",
+    "start:watch": "nodemon .",
+    "test": "run-s lint jest",
+    "test:watch": "jest --watch",
+    "lint": "standard"
   },
   "devDependencies": {
     "jest": "^27.0.5",
