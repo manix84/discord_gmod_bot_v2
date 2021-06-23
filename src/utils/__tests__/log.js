@@ -16,62 +16,62 @@ console.log = jest.fn();
 
 describe('Logs.js', () => {
   test('log', () => {
-    console.log = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'log');
     log('test');
-    expect(console.log).toHaveBeenCalledWith('test');
+    expect(consoleSpy).toHaveBeenCalledWith('test');
   });
 
   test('br', () => {
-    console.log = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'log');
     br('test');
-    expect(console.log).toHaveBeenCalledWith();
+    expect(consoleSpy).toHaveBeenCalledWith();
   });
 
   test('newLine', () => {
-    console.log = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'log');
     newLine('test');
-    expect(console.log).toHaveBeenCalledWith();
+    expect(consoleSpy).toHaveBeenCalledWith();
   });
 
   test('success', () => {
-    console.log = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'log');
     success('test');
-    expect(console.log).toHaveBeenCalledWith(chalk.green('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.green('test'));
   });
 
   test('fail', () => {
-    console.log = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'log');
     fail('test');
-    expect(console.log).toHaveBeenCalledWith(chalk.red('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.red('test'));
   });
 
   test('failure', () => {
-    console.log = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'log');
     failure('test');
-    expect(console.log).toHaveBeenCalledWith(chalk.red('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.red('test'));
   });
 
   test('info', () => {
-    console.info = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'info');
     info('test');
-    expect(console.info).toHaveBeenCalledWith(chalk.blue('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.blue('test'));
   });
 
   test('warn', () => {
-    console.warn = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'warn');
     warn('test');
-    expect(console.warn).toHaveBeenCalledWith(chalk.yellow('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.yellow('test'));
   });
 
   test('warning', () => {
-    console.warn = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'warn');
     warning('test');
-    expect(console.warn).toHaveBeenCalledWith(chalk.yellow('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.yellow('test'));
   });
 
   test('error', () => {
-    console.error = jest.fn();
+    const consoleSpy = jest.spyOn(console, 'error');
     error('test');
-    expect(console.error).toHaveBeenCalledWith(chalk.red('test'));
+    expect(consoleSpy).toHaveBeenCalledWith(chalk.red('test'));
   });
 });
