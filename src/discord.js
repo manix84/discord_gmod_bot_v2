@@ -15,6 +15,16 @@ bot.on('message', (message) => {
   }
 });
 
+bot.on('voiceStateUpdate', (oldState, newState) => {
+  if (newState.channelID !== oldState.channelID) {
+    if (newState.channelID === null) {
+      info(`${oldState.member.displayName} (${oldState.member.id}) left voice channels.`);
+    } else {
+      info(`${newState.member.displayName} (${newState.member.id}) joined "${newState.channel.name}" (${newState.channel.id}).`);
+    }
+  }
+});
+
 bot.login(process.env.DISCORD_TOKEN);
 
 module.exports = {
