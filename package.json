@@ -25,10 +25,10 @@
   "scripts": {
     "start": "start",
     "test": "run-s test:*",
-    "test:lint": "eslint"
+    "lint": "standard './src/**/*.js'"
   },
   "devDependencies": {
-    "eslint": "^7.29.x"
+    "standard": "^16.0.3"
   },
   "dependencies": {
     "cors": "^2.8.x",
