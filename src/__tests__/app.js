@@ -2,6 +2,12 @@ const app = require('../app');
 const request = require('supertest');
 
 describe('Test basic endpoints', () => {
+  // GET /invite -> 200
+  test('GET /invite', async () => {
+    await request(app).get('/invite')
+      .expect(200);
+  });
+
   // GET /servers/<UID> -> 200 | 404 | 5XX
   test('GET /servers/<UID>', async () => {
     await request(app).get('/servers/<UID>')
@@ -21,13 +27,10 @@ describe('Test basic endpoints', () => {
   });
 
   // POST /servers/<UID>/users/<UID>/mute 200 | 403 | 404
-  test('POST /servers/<UID>/users/<UID>/<COMMAND>', async () => {
+  test('POST /servers/<UID>/users/<UID>/<COMMANDS>', async () => {
     await request(app).post('/servers/<UID>/users/<UID>/<COMMAND>')
       .expect(200);
-  });
 
-  // POST /servers/<UID>/users/<UID>/mute 200 | 403 | 404
-  test('POST /servers/<UID>/users/<UID>/<VALID COMMANDS>', async () => {
     await request(app).post('/servers/<UID>/users/<UID>/mute')
       .expect(200)
       .then(response =>
