@@ -2,6 +2,11 @@ const app = require('../app');
 const request = require('supertest');
 
 describe('Test basic endpoints', () => {
+  // GET / -> 200 (HELLO WORLD)
+  test('GET /', async () => {
+    await request(app).get('/')
+      .expect(200);
+  });
   // GET /invite -> 200
   test('GET /invite', async () => {
     await request(app).get('/invite')
