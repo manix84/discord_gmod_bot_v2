@@ -4,7 +4,11 @@ require('dotenv-flow').config({
 
 const chalk = require('chalk');
 
-const DEBUG = Boolean(process.env.DEBUG === 'true');
+let DEBUG = Boolean(process.env.DEBUG === 'true');
+
+const __setDebugLogState = (state) => {
+  DEBUG = Boolean(state);
+};
 
 const log = (...msgs) => {
   if (!DEBUG) return;
@@ -50,5 +54,6 @@ module.exports = {
   info,
   warn,
   warning: warn,
-  error
+  error,
+  __setDebugLogState
 };
