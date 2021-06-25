@@ -17,41 +17,51 @@ app.use(express.urlencoded({ extended: true }));
 // GET /servers/<uid> -> 200 | 404 | 5XX
 app.get('/servers/:serverID', (req, res) => {
   const { serverID } = req.params;
-  res.json({
-    action: 'confirm server existance',
-    serverID
-  });
+  res
+    .setStatus(200)
+    .json({
+      action: 'confirm server existance',
+      serverID
+    });
 });
 // GET /servers/<uid>/users 200 | 403 | 404
 app.get('/servers/:serverID/users', (req, res) => {
   const { serverID } = req.params;
-  res.json({
-    action: 'list users',
-    serverID
-  });
+  res
+    .setStatus(200)
+    .json({
+      action: 'list users',
+      serverID
+    });
 });
 // GET /servers/<uid>/users/<uid> 200 | 403 | 404
 app.get('/servers/:serverID/users/:userID', (req, res) => {
   const { serverID, userID } = req.params;
-  res.json({
-    action: 'confirm user existance',
-    serverID,
-    userID
-  });
+  res
+    .setStatus(200)
+    .json({
+      action: 'confirm user existance',
+      serverID,
+      userID
+    });
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
 app.post('/servers/:serverID/users/:userID/:command', (req, res) => {
   const { serverID, userID, command } = req.params;
   const validCommands = ['mute', 'unmute', 'deafen', 'undeafen'];
-  res.json({
-    serverID,
-    userID,
-    command: validCommands.includes(command) && command
-  });
+  res
+    .setStatus(200)
+    .json({
+      serverID,
+      userID,
+      command: validCommands.includes(command) && command
+    });
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res
+    .setStatus(200)
+    .send('Hello World!');
 });
 
 app.get('/invite', (req, res) => {
@@ -67,7 +77,9 @@ app.get('/invite', (req, res) => {
     permissions: 29444160
   });
 
-  res.send(`
+  res
+    .setStatus(200)
+    .send(`
 <!doctype>
 <html>
   <body>
