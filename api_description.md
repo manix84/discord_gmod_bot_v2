@@ -169,3 +169,26 @@ Example payload:
 ```
 *Generally I'd prefer the first approach here, as it is more robust, and also prevents a user from avoiding a mute by disconnecting from the voicechat before the mute getting applied.*
 
+## Alternative for "POST-ing" to mute people
+
+### POST /servers/\$UID/ttt/users/\$Steam_ID/\$action
+Possible actions:
+ - mute
+ - unmute
+ - deafen
+ - undeafen  
+
+Returns:
+ - 200: The updated user object
+ - 501: If the specified action doesn't exist
+
+### POST /servers/\$UID/discord/users/\$Discord_ID/\$action
+Possible actions:
+ - mute
+ - unmute
+ - deafen
+ - undeafen  
+
+Returns:
+ - 200: The updated user object
+ - 501: If the specified action doesn't exist
