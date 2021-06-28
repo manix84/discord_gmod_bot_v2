@@ -1,56 +1,59 @@
-require('dotenv-flow').config({
+import DiscordOauth2 from "discord-oauth2";
+import { nanoid } from "nanoid";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv-flow";
+import { init as initDiscord } from "./middleware/discord";
+
+dotenv.config({
   silent: true
 });
 
-const DiscordOauth2 = require('discord-oauth2');
-const { nanoid } = require('nanoid');
-const express = require('express');
-const cors = require('cors');
+require("./utils/debug");
 
-require('./utils/debug');
-// require('./discord').init();
+initDiscord();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // GET /servers/<uid> -> 200 | 404 | 5XX
-app.get('/servers/:serverID', (request, response) => {
+app.get("/servers/:serverID", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
     .json({
-      action: 'confirm server existance',
+      action: "confirm server existance",
       serverID
     });
 });
 // GET /servers/<uid>/users 200 | 403 | 404
-app.get('/servers/:serverID/users', (request, response) => {
+app.get("/servers/:serverID/users", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
     .json({
-      action: 'list users',
+      action: "list users",
       serverID
     });
 });
 // GET /servers/<uid>/users/<uid> 200 | 403 | 404
-app.get('/servers/:serverID/users/:userID', (request, response) => {
+app.get("/servers/:serverID/users/:userID", (request, response) => {
   const { serverID, userID } = request.params;
   response
     .status(200)
     .json({
-      action: 'confirm user existance',
+      action: "confirm user existance",
       serverID,
       userID
     });
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
-app.post('/servers/:serverID/users/:userID/:command', (request, response) => {
+app.post("/servers/:serverID/users/:userID/:command", (request, response) => {
   const { serverID, userID, command } = request.params;
-  const validCommands = ['mute', 'unmute', 'deafen', 'undeafen'];
+  const validCommands = ["mute", "unmute", "deafen", "undeafen"];
   const vettedCommand = validCommands.includes(command) && command;
   response
     .status(vettedCommand ? 200 : 404)
@@ -61,21 +64,21 @@ app.post('/servers/:serverID/users/:userID/:command', (request, response) => {
     });
 });
 
-app.get('/', (request, response) => {
+app.get("/", (_request, response) => {
   response
     .status(200)
-    .send('Hello World!');
+    .send("Hello World!");
 });
 
-app.get('/invite', (request, response) => {
+app.get("/invite", (_request, response) => {
   const oauth = new DiscordOauth2({
     clientId: process.env.DISCORD_CLIENT_ID,
     clientSecret: process.env.DISCORD_CLIENT_SECRET,
     redirectUri: `https://${process.env.HOST}/callback`
   });
 
-  const url = oauth.generateAuthUrl({
-    scope: ['identify', 'guilds', 'bot'],
+  const url: string = oauth.generateAuthUrl({
+    scope: ["identify", "guilds", "bot"],
     state: nanoid(),
     permissions: 29444160
   });
@@ -87,10 +90,10 @@ app.get('/invite', (request, response) => {
 <html>
   <body>
     <a href="${url}">Invite Bot</a>
-    <pre>${url.replace(/([&?])([a-z0-9-_.~!*'();:@+$,/?#[\]]+)=/gi, '\n$1 <strong>$2</strong> = ')}</pre>
+    <pre>${url.replace(/([&?])([a-z0-9-_.~!*'();:@+$,/?#[\]]+)=/gi, "\n$1 <strong>$2</strong> = ")}</pre>
   </body>
 </html>
   `);
 });
 
-module.exports = app;
+export default app;

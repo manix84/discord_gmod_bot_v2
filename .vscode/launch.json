@@ -1,0 +1,7 @@
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Launch test",
+  "runtimeVersion": "14",
+  "program": "${workspaceFolder}/server.js"
+}
