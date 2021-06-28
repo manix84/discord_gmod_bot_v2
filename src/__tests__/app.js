@@ -1,70 +1,91 @@
 const app = require('../app');
-const request = require('supertest');
+const supertest = require('supertest');
+
+jest.mock('../discord', () => {
+  return {
+    init: jest.fn()
+  };
+});
+jest.mock('Discord.js', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      login: jest.fn()
+    };
+  });
+});
 
 describe('Test basic endpoints', () => {
   // GET / -> 200 (HELLO WORLD)
   test('GET /', async () => {
-    await request(app).get('/')
-      .expect(200);
+    await supertest(app)
+      .get('/')
+      .expect(200)
+      .then((response) => {
+        expect(response.text).toBe('Hello World!');
+      });
   });
 
   // GET /invite -> 200
   test('GET /invite', async () => {
-    await request(app).get('/invite')
+    await supertest(app)
+      .get('/invite')
       .expect(200);
   });
 
-  // GET /servers/<UID> -> 200 | 404 | 5XX
-  test('GET /servers/<UID>', async () => {
-    await request(app).get('/servers/<UID>')
+  // GET /servers/:serverID -> 200 | 404 | 5XX
+  test('GET /servers/:serverID', async () => {
+    await supertest(app)
+      .get('/servers/1')
       .expect(200);
   });
 
-  // GET /servers/<UID>/users 200 | 403 | 404
-  test('GET /servers/<UID>/users', async () => {
-    await request(app).get('/servers/<UID>/users')
+  // GET /servers/:serverID/users 200 | 403 | 404
+  test('GET /servers/:serverID/users', async () => {
+    await supertest(app)
+      .get('/servers/1/users')
       .expect(200);
   });
 
-  // GET /servers/<UID>/users/<UID> 200 | 403 | 404
-  test('GET /servers/<UID>/users/<UID>', async () => {
-    await request(app).get('/servers/<UID>/users/<UID>')
+  // GET /servers/:serverID/users/:userID 200 | 403 | 404
+  test('GET /servers/:serverID/users/:userID', async () => {
+    await supertest(app)
+      .get('/servers/1/users/1')
       .expect(200);
   });
 
-  // POST /servers/<UID>/users/<UID>/mute 200 | 403 | 404
-  test('POST /servers/<UID>/users/<UID>/<COMMANDS>', async () => {
-    await request(app).post('/servers/<UID>/users/<UID>/<COMMAND>')
-      .expect(200);
-
-    await request(app).post('/servers/<UID>/users/<UID>/mute')
+  // POST /servers/:serverID/users/:userID/mute 200 | 403 | 404
+  test('POST /servers/:serverID/users/:userID/mute', async () => {
+    await supertest(app)
+      .post('/servers/1/users/1/mute')
+      .send({})
       .expect(200)
-      .then(response =>
-        response.body.command === 'mute'
-      );
-
-    await request(app).post('/servers/<UID>/users/<UID>/unmute')
+      .then(response => response.body.command === 'mute');
+  });
+  test('POST /servers/:serverID/users/:userID/unmute', async () => {
+    await supertest(app)
+      .post('/servers/1/users/1/unmute')
+      .send({})
       .expect(200)
-      .then(response =>
-        response.body.command === 'unmute'
-      );
-
-    await request(app).post('/servers/<UID>/users/<UID>/deafen')
+      .then(response => response.body.command === 'unmute');
+  });
+  test('POST /servers/:serverID/users/:userID/deafen', async () => {
+    await supertest(app)
+      .post('/servers/1/users/1/deafen')
+      .send({})
       .expect(200)
-      .then(response =>
-        response.body.command === 'deafen'
-      );
-
-    await request(app).post('/servers/<UID>/users/<UID>/undeafen')
+      .then(response => response.body.command === 'deafen');
+  });
+  test('POST /servers/:serverID/users/:userID/undeafen', async () => {
+    await supertest(app)
+      .post('/servers/1/users/1/undeafen')
+      .send({})
       .expect(200)
-      .then(response =>
-        response.body.command === 'undeafen'
-      );
-
-    await request(app).post('/servers/<UID>/users/<UID>/invalid')
-      .expect(200)
-      .then(response =>
-        response.body.command === false
-      );
+      .then(response => response.body.command === 'undeafen');
+  });
+  test('POST /servers/:serverID/users/:userID/invalid', async () => {
+    await supertest(app)
+      .post('/servers/1/users/1/invalid')
+      .send({})
+      .expect(404);
   });
 });

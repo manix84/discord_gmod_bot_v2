@@ -7,38 +7,40 @@ const { nanoid } = require('nanoid');
 const express = require('express');
 const cors = require('cors');
 
-require('./discord');
+require('./utils/debug');
+// require('./discord').init();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static('public'));
 
 // GET /servers/<uid> -> 200 | 404 | 5XX
-app.get('/servers/:serverID', (req, res) => {
-  const { serverID } = req.params;
-  res
-    .setStatus(200)
+app.get('/servers/:serverID', (request, response) => {
+  const { serverID } = request.params;
+  response
+    .status(200)
     .json({
       action: 'confirm server existance',
       serverID
     });
 });
 // GET /servers/<uid>/users 200 | 403 | 404
-app.get('/servers/:serverID/users', (req, res) => {
-  const { serverID } = req.params;
-  res
-    .setStatus(200)
+app.get('/servers/:serverID/users', (request, response) => {
+  const { serverID } = request.params;
+  response
+    .status(200)
     .json({
       action: 'list users',
       serverID
     });
 });
 // GET /servers/<uid>/users/<uid> 200 | 403 | 404
-app.get('/servers/:serverID/users/:userID', (req, res) => {
-  const { serverID, userID } = req.params;
-  res
-    .setStatus(200)
+app.get('/servers/:serverID/users/:userID', (request, response) => {
+  const { serverID, userID } = request.params;
+  response
+    .status(200)
     .json({
       action: 'confirm user existance',
       serverID,
@@ -46,29 +48,30 @@ app.get('/servers/:serverID/users/:userID', (req, res) => {
     });
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
-app.post('/servers/:serverID/users/:userID/:command', (req, res) => {
-  const { serverID, userID, command } = req.params;
+app.post('/servers/:serverID/users/:userID/:command', (request, response) => {
+  const { serverID, userID, command } = request.params;
   const validCommands = ['mute', 'unmute', 'deafen', 'undeafen'];
-  res
-    .setStatus(200)
+  const vettedCommand = validCommands.includes(command) && command;
+  response
+    .status(vettedCommand ? 200 : 404)
     .json({
       serverID,
       userID,
-      command: validCommands.includes(command) && command
+      vettedCommand
     });
 });
 
-app.get('/', (req, res) => {
-  res
-    .setStatus(200)
+app.get('/', (request, response) => {
+  response
+    .status(200)
     .send('Hello World!');
 });
 
-app.get('/invite', (req, res) => {
+app.get('/invite', (request, response) => {
   const oauth = new DiscordOauth2({
     clientId: process.env.DISCORD_CLIENT_ID,
     clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    redirectUri: 'https://discord-muter-beta.herokuapp.com/callback'
+    redirectUri: `https://${process.env.HOST}/callback`
   });
 
   const url = oauth.generateAuthUrl({
@@ -77,8 +80,8 @@ app.get('/invite', (req, res) => {
     permissions: 29444160
   });
 
-  res
-    .setStatus(200)
+  response
+    .status(200)
     .send(`
 <!doctype>
 <html>
