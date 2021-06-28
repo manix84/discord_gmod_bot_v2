@@ -20,10 +20,10 @@ bot.on('message', (message) => {
       info(message.content);
       const exampleEmbed = new Discord.MessageEmbed()
         .setColor('#0099ff')
-        .setTitle('Some title')
+        .setTitle('Discord Muter - Setup')
         .addFields(
           { name: 'Your Discord Muter Connection Token', value: nanoid() }
-        )
+        );
       message.channel.send(exampleEmbed);
     }
     if (message.member.hasPermission('ADMINISTRATOR')) {
