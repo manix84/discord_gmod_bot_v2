@@ -18,13 +18,24 @@ bot.on('message', (message) => {
     }
     if (message.content.endsWith('setup')) {
       info(message.content);
-      const exampleEmbed = new Discord.MessageEmbed()
+      const authToken = nanoid();
+      const embeddedSetupMessage = new Discord.MessageEmbed()
         .setColor('#0099ff')
-        .setTitle('Discord Muter - Setup')
+        .setTitle('Let\'s get you setup')
+        // .setURL(`https://${process.env.HOST}/`)
+        .setDescription('Some instructions here, for adding the AuthToken to the Bot Addon.')
+        .setThumbnail(`https://${process.env.HOST}/images/logo.png`)
+        .addField('Your Discord Muter AuthToken', authToken)
+        .addField('Server config value', `\`\`\`config\ndiscord_auth_token "${authToken}"\n\`\`\``)
         .addFields(
-          { name: 'Your Discord Muter Connection Token', value: nanoid() }
-        );
-      message.channel.send(exampleEmbed);
+          { name: 'Step 1', value: 'Open Garry\'s Mod Server config:\n`/garrysmod/cfg/server.cfg`', inline: true },
+          { name: 'Step 2', value: `Add the config value to Server config: \n\`discord_auth_token "${authToken}"\``, inline: true },
+          { name: 'Step 3', value: 'Save your changes, and restart your Garry\'s Mod server.', inline: true }
+        )
+        // .setImage('') // Some instruction image here to show adding the AuthToken into place.
+        .setTimestamp()
+        .setFooter('Discord Muter', `https://${process.env.HOST}/images/logo_bordered.png`);
+      message.channel.send(embeddedSetupMessage);
     }
     if (message.member.hasPermission('ADMINISTRATOR')) {
       info('THIS USER HAS ADMINISTRATOR PERMISSIONS!');
