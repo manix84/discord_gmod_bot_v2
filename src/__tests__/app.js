@@ -6,13 +6,6 @@ jest.mock('../discord', () => {
     init: jest.fn()
   };
 });
-jest.mock('Discord.js', () => {
-  return jest.fn().mockImplementation(() => {
-    return {
-      login: jest.fn()
-    };
-  });
-});
 
 describe('Test basic endpoints', () => {
   // GET / -> 200 (HELLO WORLD)
