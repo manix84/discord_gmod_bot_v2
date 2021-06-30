@@ -46,9 +46,9 @@ bot.on("message", (message: Discord.Message) => {
 
       dbase.registerServer(Number(message.guild?.id), authToken, success => {
         if (success) {
-      message.author.send(embeddedSetupMessage);
-      message.channel.send("Check your private messages for setup instructions.");
-    }
+          message.author.send(embeddedSetupMessage);
+          message.channel.send("Check your private messages for setup instructions.");
+        }
       });
     }
     if (message.member?.hasPermission("ADMINISTRATOR")) {
@@ -78,32 +78,32 @@ export class DiscordMiddleware {
   mutePlayer = (discordMemberID: number, reason?: string): void => {
     this.guild.then(discordGuild => {
       discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-      if (!member.voice.serverMute) {
+        if (!member.voice.serverMute) {
           member.voice.setMute(true, reason).then(() => {
-          success(
-            "[Mute][Discord:SetMute][Success]",
-            `Muted ${discordMemberID}`
-          );
-        }).catch((err) => {
-          error(
-            "[Mute][Discord:SetMute][Error]",
-            `Mute: ${discordMemberID} - ${err}`
-          );
-        });
-      }
+            success(
+              "[Mute][Discord:SetMute][Success]",
+              `Muted ${discordMemberID}`
+            );
+          }).catch((err) => {
+            error(
+              "[Mute][Discord:SetMute][Error]",
+              `Mute: ${discordMemberID} - ${err}`
+            );
+          });
+        }
+      }).catch((err) => {
+        error(
+          "[Mute][Discord:SetMute][Error]",
+          `Mute: ${discordMemberID} - ${err}`
+        );
+      });
     }).catch((err) => {
       error(
         "[Mute][Discord:SetMute][Error]",
         `Mute: ${discordMemberID} - ${err}`
       );
     });
-  }).catch((err) => {
-    error(
-      "[Mute][Discord:SetMute][Error]",
-      `Mute: ${discordMemberID} - ${err}`
-    );
-  });
-};
+  };
 
 }
 
