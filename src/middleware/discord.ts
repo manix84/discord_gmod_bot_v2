@@ -1,8 +1,10 @@
 import Discord from "discord.js";
 import { nanoid } from "nanoid";
 import { success, info, warn, error, br } from "../utils/log";
+import Database from "./Database";
 
 const bot = new Discord.Client();
+const dbase = new Database();
 const PREFIX: string = process.env.DISCORD_PREFIX || "!muter";
 
 bot.on("ready", () => {
@@ -41,8 +43,13 @@ bot.on("message", (message: Discord.Message) => {
         // .setImage('') // Some instruction image here to show adding the AuthToken into place.
         .setTimestamp()
         .setFooter("Discord Muter", `https://${process.env.HOST}/images/logo_bordered.png`);
+
+      dbase.registerServer(Number(message.guild?.id), authToken, success => {
+        if (success) {
       message.author.send(embeddedSetupMessage);
       message.channel.send("Check your private messages for setup instructions.");
+    }
+      });
     }
     if (message.member?.hasPermission("ADMINISTRATOR")) {
       info("[Server]: Admin!");
