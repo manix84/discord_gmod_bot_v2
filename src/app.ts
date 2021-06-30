@@ -3,7 +3,7 @@ import { nanoid } from "nanoid";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv-flow";
-import { init as initDiscord } from "./middleware/discord";
+import { init as initDiscord } from "./middleware/Discord";
 
 dotenv.config({
   silent: true

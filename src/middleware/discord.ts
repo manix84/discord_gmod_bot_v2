@@ -10,12 +10,13 @@ bot.on("ready", () => {
   br();
 });
 
-bot.on("message", (message) => {
+bot.on("message", (message: Discord.Message) => {
   if (message.content.startsWith(`${PREFIX} `) && message.channel.type !== "dm") {
     if (message.content.endsWith("ping!")) {
       info(message.content);
       message.channel.send("pong!");
     }
+
     if (message.content.endsWith("setup")) {
       info(message.content);
       if (!message.member?.hasPermission("ADMINISTRATOR")) {
@@ -23,6 +24,7 @@ bot.on("message", (message) => {
         return;
       }
       const authToken = nanoid();
+
       const embeddedSetupMessage = new Discord.MessageEmbed()
         .setColor("#0099ff")
         .setTitle("Let's get you setup")
@@ -48,7 +50,7 @@ bot.on("message", (message) => {
   }
 });
 
-bot.on("voiceStateUpdate", (oldState, newState) => {
+bot.on("voiceStateUpdate", (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
   if (newState.channelID !== oldState.channelID) {
     if (newState.channelID === null) {
       info(`${oldState.member?.displayName} (${oldState.member?.id}) left voice channels.`);
@@ -58,11 +60,19 @@ bot.on("voiceStateUpdate", (oldState, newState) => {
   }
 });
 
-export const mutePlayer = (discordMemberID: string, discordServerID: string): void => {
-  bot.guilds.fetch(discordServerID).then(discordGuild => {
-    discordGuild.members.fetch(discordMemberID).then((member) => {
+export class DiscordMiddleware {
+  guild: Promise<Discord.Guild>;
+
+  constructor(serverID: number) {
+    if (!serverID) return;
+    this.guild = bot.guilds.fetch(`${serverID}`);
+  }
+
+  mutePlayer = (discordMemberID: number, reason?: string): void => {
+    this.guild.then(discordGuild => {
+      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
       if (!member.voice.serverMute) {
-        member.voice.setMute(true, "Dead players can't talk!").then(() => {
+          member.voice.setMute(true, reason).then(() => {
           success(
             "[Mute][Discord:SetMute][Success]",
             `Muted ${discordMemberID}`
@@ -87,6 +97,8 @@ export const mutePlayer = (discordMemberID: string, discordServerID: string): vo
     );
   });
 };
+
+}
 
 export const init = (): void => {
   bot.login(process.env.DISCORD_TOKEN);
