@@ -44,12 +44,27 @@ bot.on("message", (message: Discord.Message) => {
         .setTimestamp()
         .setFooter("Discord Muter", `https://${process.env.HOST}/images/logo_bordered.png`);
 
-      dbase.registerServer(Number(message.guild?.id), authToken, success => {
-        if (success) {
-          message.author.send(embeddedSetupMessage);
+      if (message.content.endsWith("re-setup")) {
+        dbase.reRegisterServer(Number(message.guild?.id), authToken, (success) => {
+          if (success) {
+            message.author.send(embeddedSetupMessage);
+          } else {
+            message.author.send("Something went wrong. This is probably an internal issue. We've notified the Code Monkies.");
+          }
           message.channel.send("Check your private messages for setup instructions.");
-        }
-      });
+        });
+      } else {
+        dbase.registerServer(Number(message.guild?.id), authToken, (success, reason) => {
+          if (success) {
+            message.author.send(embeddedSetupMessage);
+          } else if (reason === "ER_DUP_ENTRY") {
+            message.author.send(`If looks like the host is already connected. If you're sure you want to re-register, please run \`${PREFIX} re-setup\`.`);
+          } else {
+            message.author.send("Something went wrong. This is probably an internal issue. We've notified the Code Monkies.");
+          }
+          message.channel.send("Check your private messages for setup instructions.");
+        });
+      }
     }
     if (message.member?.hasPermission("ADMINISTRATOR")) {
       info("[Server]: Admin!");

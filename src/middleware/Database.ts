@@ -1,6 +1,6 @@
 import dotenv from "dotenv-flow";
 import mysql from "mysql";
-import { error, info } from "../utils/log";
+import { error } from "../utils/log";
 
 dotenv.config({
   silent: true
@@ -13,6 +13,7 @@ type DatabaseOptions = {
 
 type QueryResponse = {
   success: boolean;
+  reason?: string;
   results: any;
 }
 
@@ -21,7 +22,10 @@ interface QueryCallback {
 }
 
 interface RegisterServerCallback {
-  (success: boolean): void
+  (
+    success: boolean,
+    reason?: string
+  ): void
 }
 
 class Database {
@@ -51,6 +55,7 @@ class Database {
       if (callback) {
         callback({
           success: !err,
+          reason: err && err.code || undefined,
           results
         });
       }
@@ -60,6 +65,19 @@ class Database {
 
   registerServer(serverID: number, authToken: string, callback: RegisterServerCallback) {
     this._runQuery(
+      `INSERT INTO servers (
+        server_id,
+        auth_token
+      ) VALUES (
+        ${mysql.escape(serverID)},
+        ${mysql.escape(authToken)}
+      );`,
+      (response) => callback(response.success, response.reason)
+    );
+  }
+
+  reRegisterServer(serverID: number, authToken: string, callback: RegisterServerCallback) {
+    this._runQuery(
       `REPLACE INTO servers (
         server_id,
         auth_token
@@ -67,7 +85,7 @@ class Database {
         ${mysql.escape(serverID)},
         ${mysql.escape(authToken)}
       );`,
-      (response) => callback(response.success)
+      (response) => callback(response.success, response.reason)
     );
   }
 }
