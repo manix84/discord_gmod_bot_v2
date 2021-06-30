@@ -8,13 +8,13 @@ jest.mock("../middleware/discord", () => {
 });
 
 describe("Test basic endpoints", () => {
-  // GET / -> 200 (HELLO WORLD)
+  // GET / -> 203
   test("GET /", async () => {
     await supertest(app)
       .get("/")
-      .expect(200)
+      .expect(203)
       .then((response) => {
-        expect(response.text).toBe("Hello World!");
+        expect(response.text).toBeUndefined;
       });
   });
 

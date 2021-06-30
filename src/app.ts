@@ -66,8 +66,8 @@ app.post("/servers/:serverID/users/:userID/:command", (request, response) => {
 
 app.get("/", (_request, response) => {
   response
-    .status(200)
-    .send("Hello World!");
+    .status(203)
+    .send();
 });
 
 app.get("/invite", (_request, response) => {
@@ -86,7 +86,7 @@ app.get("/invite", (_request, response) => {
   response
     .status(200)
     .send(`
-<!doctype>
+<!DOCTYPE html>
 <html>
   <body>
     <a href="${url}">Invite Bot</a>
