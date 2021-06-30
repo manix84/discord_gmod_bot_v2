@@ -1,7 +1,7 @@
 import app from "../app";
 import supertest from "supertest";
 
-jest.mock("../middleware/discord", () => {
+jest.mock("../middleware/Discord", () => {
   return {
     init: jest.fn()
   };
