@@ -48,9 +48,7 @@ class Database {
       sql: query,
       timeout: 2500, // 2.5s
     }, (err, results) => {
-      if (err) {
-        error("err", err);
-      }
+      if (err) error("err", err);
       if (callback) {
         callback({
           success: !err,
