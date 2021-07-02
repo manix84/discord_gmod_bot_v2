@@ -1,6 +1,5 @@
 import app from "../app";
 import supertest from "supertest";
-import { nanoid } from "nanoid";
 
 const MOCK_SERVER_ID = 1234567890;
 

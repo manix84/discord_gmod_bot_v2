@@ -1,5 +1,4 @@
 import Database from "../middleware/Database";
-import { info } from "./log";
 
 const dbase = new Database();
 
