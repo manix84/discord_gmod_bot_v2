@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import authenticate, {sanitiseAuthToken} from "../authentication";
+import authenticate, { sanitiseAuthToken } from "../authentication";
 
 const MOCK_SERVER_ID = 1234567890;
 
