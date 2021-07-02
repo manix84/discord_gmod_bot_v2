@@ -7,8 +7,7 @@ dotenv.config({
 });
 
 type DatabaseOptions = {
-  writeOnSet?: boolean;
-  refreshDelay?: number;
+  databaseURL: string;
 };
 
 type QueryResponse = {
@@ -32,13 +31,13 @@ class Database {
   options: DatabaseOptions;
 
   constructor(options?: DatabaseOptions) {
-    this.options = Object.assign({}, options);
+    this.options = Object.assign({
+      databaseURL: process.env.MYSQL_DATABASE_URL
+    }, options);
   }
 
   _connect(): mysql.Connection {
-    const DatabaseURL = process.env.MYSQL_DATABASE_URL || "";
-
-    const connection = mysql.createConnection(DatabaseURL);
+    const connection = mysql.createConnection(this.options.databaseURL);
     connection.connect();
     return connection;
   }
