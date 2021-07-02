@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv-flow";
 import { init as initDiscord } from "./middleware/Discord";
+import authenticate from "./utils/authentication";
 
 dotenv.config({
   silent: true
@@ -53,15 +54,26 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
 app.post("/servers/:serverID/users/:userID/:command", (request, response) => {
   const { serverID, userID, command } = request.params;
+  const { authorization } = request.headers;
   const validCommands = ["mute", "unmute", "deafen", "undeafen"];
   const vettedCommand = validCommands.includes(command) && command;
-  response
-    .status(vettedCommand ? 200 : 404)
-    .json({
-      serverID,
-      userID,
-      vettedCommand
-    });
+  if (!vettedCommand) {
+    response
+      .status(404)
+      .send();
+  } else if (authenticate(authorization, serverID)) {
+    response
+      .status(200)
+      .json({
+        serverID,
+        userID,
+        vettedCommand
+      });
+  } else {
+    response
+      .status(403)
+      .send();
+  }
 });
 
 app.get("/", (_request, response) => {

@@ -88,6 +88,18 @@ class Database {
       (response) => callback(response.success, response.reason)
     );
   }
+
+  getServerID(authToken: string) {
+    let output;
+    this._runQuery(
+      `SELECT auth_token
+      FROM servers
+      WHERE auth_token = ${mysql.escape(authToken)};`,
+      (response) => output = response
+    );
+    console.log("output", output);
+    return output;
+  }
 }
 
 export default Database;
