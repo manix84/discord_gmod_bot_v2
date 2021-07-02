@@ -8,12 +8,12 @@
     "type": "git",
     "url": "https://github.com/manix84/discord_gmod_bot_v2.git"
   },
+  "author": {
+    "name": "Rob Taylor",
+    "email": "manix84@gmail.com",
+    "url": "https://github.com/manix84"
+  },
   "contributors": [
-    {
-      "name": "Rob Taylor",
-      "email": "manix84@gmail.com",
-      "url": "https://github.com/manix84"
-    },
     {
       "name": "Pepich",
       "email": "admin@pepich.de",
