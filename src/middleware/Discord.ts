@@ -16,6 +16,9 @@ bot.on("message", (message: Discord.Message) => {
     case "setup":
       setup(message);
       break;
+    case "re-setup":
+      setup(message, true);
+      break;
     case "ping":
       ping(message);
       break;

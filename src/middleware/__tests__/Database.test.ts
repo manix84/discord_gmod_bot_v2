@@ -57,14 +57,8 @@ describe("Database", () => {
     const dBase = new Database();
     expect(dBase.registerServer).toBeDefined();
     dBase.registerServer(12345567890, "abcdefgHIJKLMN1234567", () => "");
-    expect(mysql.createConnection).toHaveBeenCalledTimes(1);
-  });
-
-  test("reRegisterServer", () => {
-    const dBase = new Database();
-    expect(dBase.reRegisterServer).toBeDefined();
-    dBase.reRegisterServer(12345567890, "abcdefgHIJKLMN1234567", () => "");
-    expect(mysql.createConnection).toHaveBeenCalledTimes(1);
+    dBase.registerServer(12345567890, "abcdefgHIJKLMN1234567", () => "", true);
+    expect(mysql.createConnection).toHaveBeenCalledTimes(2);
   });
 
   test("getServerID", () => {
