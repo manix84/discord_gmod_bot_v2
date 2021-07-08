@@ -72,6 +72,6 @@ export class DiscordMiddleware {
 
 }
 
-export const init = (): void => {
-  bot.login(process.env.DISCORD_TOKEN);
+export const init = (token?: string): void => {
+  bot.login(token || process.env.DISCORD_TOKEN);
 };
