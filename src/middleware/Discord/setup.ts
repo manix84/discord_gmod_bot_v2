@@ -26,7 +26,6 @@ const generateSetupInstructions = (authToken: string) => {
 };
 
 const setup = (message: Discord.Message, overwrite = false) => {
-  info(message.content);
   if (!message.member?.hasPermission("ADMINISTRATOR")) {
     warn("[Server]: I'm just going to ignore this!");
     return;

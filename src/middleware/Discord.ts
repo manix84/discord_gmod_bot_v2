@@ -12,16 +12,20 @@ bot.on("ready", () => {
 });
 
 bot.on("message", (message: Discord.Message) => {
-  switch (parseCommand(message.content)) {
-    case "setup":
-      setup(message);
-      break;
-    case "re-setup":
-      setup(message, true);
-      break;
-    case "ping":
-      ping(message);
-      break;
+  if (message.channel.type !== "dm") {
+    switch (parseCommand(message.content)) {
+      case "setup":
+        setup(message);
+        break;
+      case "re-setup":
+        setup(message, true);
+        break;
+      case "ping":
+        ping(message);
+        break;
+    }
+  } else {
+    message.author.send("Sorry, I've no DM'able commands right now.");
   }
 });
 
