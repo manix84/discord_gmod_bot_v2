@@ -29,16 +29,6 @@ bot.on("message", (message: Discord.Message) => {
   }
 });
 
-bot.on("voiceStateUpdate", (oldState: Discord.VoiceState, newState: Discord.VoiceState) => {
-  if (newState.channelID !== oldState.channelID) {
-    if (newState.channelID === null) {
-      info(`${oldState.member?.displayName} (${oldState.member?.id}) left voice channels.`);
-    } else {
-      info(`${newState.member?.displayName} (${newState.member?.id}) joined "${newState.channel?.name}" (${newState.channel?.id}).`);
-    }
-  }
-});
-
 export class DiscordMiddleware {
   guild: Promise<Discord.Guild>;
 
