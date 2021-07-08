@@ -1,13 +1,13 @@
 import Discord from "discord.js";
 import { nanoid } from "nanoid";
-import { info, warn } from "../../utils/log";
+import { warn } from "../../utils/log";
 import Database from "../Database";
 
 const dbase = new Database();
 const PREFIX: string = process.env.DISCORD_PREFIX || "!muter";
 
-const generateSetupInstructions = (authToken: string) => {
-  return new Discord.MessageEmbed()
+const generateSetupInstructions = (authToken: string) => (
+  new Discord.MessageEmbed()
     .setColor("#0099ff")
     .setTitle("Let's get you setup")
     // .setURL(`https://${process.env.HOST}/`)
@@ -22,8 +22,8 @@ const generateSetupInstructions = (authToken: string) => {
     )
     // .setImage('') // Some instruction image here to show adding the AuthToken into place.
     .setTimestamp()
-    .setFooter("Discord Muter", `https://${process.env.HOST}/images/logo_bordered.png`);
-};
+    .setFooter("Discord Muter", `https://${process.env.HOST}/images/logo_bordered.png`)
+);
 
 const setup = (message: Discord.Message, overwrite = false) => {
   if (!message.member?.hasPermission("ADMINISTRATOR")) {
@@ -37,7 +37,7 @@ const setup = (message: Discord.Message, overwrite = false) => {
     } else if (reason === "ER_DUP_ENTRY") {
       message.author.send(`If looks like the host is already connected. If you're sure you want to re-register, please run \`${PREFIX} re-setup\`.`);
     } else {
-      message.author.send("Something went wrong. This is probably an internal issue. We've notified the Code Monkies.");
+      message.author.send("Something went wrong. This is probably an internal issue. We've notified the Code-Monkeys.");
     }
     message.channel.send("Check your private messages for setup instructions.");
   }, overwrite);
