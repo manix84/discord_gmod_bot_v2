@@ -1,10 +1,10 @@
 import Discord from "discord.js";
+import parseCommand from "../utils/parseCommand";
 import { success, info, error, br } from "../utils/log";
 import ping from "./Discord/ping";
 import setup from "./Discord/setup";
 
 const bot = new Discord.Client();
-const PREFIX: string = process.env.DISCORD_PREFIX || "!muter";
 
 bot.on("ready", () => {
   info(`Logged in as ${bot.user?.tag}!`);
@@ -12,9 +12,13 @@ bot.on("ready", () => {
 });
 
 bot.on("message", (message: Discord.Message) => {
-  if (message.content.startsWith(`${PREFIX} `) && message.channel.type !== "dm") {
-    if (message.content.endsWith("ping!")) ping(message);
-    if (message.content.endsWith("setup")) setup(message);
+  switch (parseCommand(message.content)) {
+    case "setup":
+      setup(message);
+      break;
+    case "ping":
+      ping(message);
+      break;
   }
 });
 
