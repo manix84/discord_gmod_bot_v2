@@ -1,4 +1,3 @@
-
 import Database from "../Database";
 import mysql from "mysql";
 
@@ -6,32 +5,28 @@ describe("Database", () => {
 
   beforeEach(() => {
     mysql.createConnection = jest.fn()
-      .mockImplementationOnce(() => {
-        return {
-          connect: jest.fn(),
-          query: jest.fn()
-            .mockImplementation((_query, callback) => {
-              const error = new Error("mysql error");
-              const results: string[] = [];
-              const fields = ["some", "fields"];
-              callback(error, results, fields);
-            }),
-          end: jest.fn()
-        };
-      })
-      .mockImplementationOnce(() => {
-        return {
-          connect: jest.fn(),
-          query: jest.fn()
-            .mockImplementation((_query, callback) => {
-              const error = null;
-              const results: string[] = [];
-              const fields = ["some", "fields"];
-              callback(error, results, fields);
-            }),
-          end: jest.fn()
-        };
-      });
+      .mockImplementationOnce(() => ({
+        connect: jest.fn(),
+        query: jest.fn()
+          .mockImplementation((_query, callback) => {
+            const error = new Error("mysql error");
+            const results: string[] = [];
+            const fields = ["some", "fields"];
+            callback(error, results, fields);
+          }),
+        end: jest.fn()
+      }))
+      .mockImplementationOnce(() => ({
+        connect: jest.fn(),
+        query: jest.fn()
+          .mockImplementation((_query, callback) => {
+            const error = null;
+            const results: string[] = [];
+            const fields = ["some", "fields"];
+            callback(error, results, fields);
+          }),
+        end: jest.fn()
+      }));
   });
 
   test("constructor", () => {
