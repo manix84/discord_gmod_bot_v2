@@ -24,13 +24,13 @@ describe("SanitiseAuthToken", () => {
   });
 
   test("Token: Too short", () => {
-    const token = nanoid().substring(0,20);
+    const token = nanoid().substring(0, 20);
     const result = sanitiseAuthToken(`BASIC ${token}`);
     expect(result).toBeFalsy();
   });
 
   test("Token: Has invalid characters", () => {
-    const token = nanoid().substring(0,20) + "*";
+    const token = nanoid().substring(0, 20) + "*";
     const result = sanitiseAuthToken(`BASIC ${token}`);
     expect(result).toBeFalsy();
   });
