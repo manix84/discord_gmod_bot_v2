@@ -6,7 +6,7 @@ import Database from "../Database";
 const dbase = new Database();
 const PREFIX: string = process.env.DISCORD_PREFIX || "!muter";
 
-const generateSetupInstructions = (authToken: string) => (
+export const generateSetupInstructions = (authToken: string) => (
   new Discord.MessageEmbed()
     .setColor("#0099ff")
     .setTitle("Let's get you setup")
