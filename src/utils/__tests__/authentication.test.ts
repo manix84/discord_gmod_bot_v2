@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import authenticate, { sanitiseAuthToken } from "../authentication";
+import authenticate, { sanitiseAuthToken, generateAuthToken } from "../authentication";
 
 const MOCK_SERVER_ID = 1234567890;
 
@@ -9,28 +9,40 @@ jest.mock("../../middleware/Database", () => {
   }));
 });
 
+describe("GenerateAuthToken", () => {
+
+  test("Token: valid", () => {
+    const token = generateAuthToken();
+    expect(token).toMatch(/^([A-Za-z0-9_-]{21})$/);
+  });
+
+});
+
+
 describe("SanitiseAuthToken", () => {
 
   test("Token: valid", () => {
-    const token = nanoid();
+    const token = generateAuthToken();
     const result = sanitiseAuthToken(`BASIC ${token}`);
     expect(result).toBe(token);
   });
 
   test("Token: Too long", () => {
-    const token = nanoid() + "abc";
+    const token = generateAuthToken() + "abc";
     const result = sanitiseAuthToken(`BASIC ${token}`);
     expect(result).toBeFalsy();
   });
 
   test("Token: Too short", () => {
-    const token = nanoid().substring(0, 20);
+    let token = generateAuthToken();
+    token = token.substring(0, token.length - 1);
     const result = sanitiseAuthToken(`BASIC ${token}`);
     expect(result).toBeFalsy();
   });
 
   test("Token: Has invalid characters", () => {
-    const token = nanoid().substring(0, 20) + "*";
+    let token = generateAuthToken();
+    token = token.substring(0, token.length - 1) + "*";
     const result = sanitiseAuthToken(`BASIC ${token}`);
     expect(result).toBeFalsy();
   });
@@ -40,13 +52,13 @@ describe("SanitiseAuthToken", () => {
 describe("Authenticate", () => {
 
   test("valid", () => {
-    const token = nanoid();
+    const token = generateAuthToken();
     const isAuthed = authenticate(`BASIC ${token}`, String(MOCK_SERVER_ID));
     expect(isAuthed).toBeTruthy();
   });
 
   test("missing serverID", () => {
-    const token = nanoid();
+    const token = generateAuthToken();
     const isAuthed = authenticate(`BASIC ${token}`);
     expect(isAuthed).toBeFalsy();
   });
@@ -57,13 +69,13 @@ describe("Authenticate", () => {
   });
 
   test("invalid token, valid serverID", () => {
-    const token = nanoid();
+    const token = generateAuthToken();
     const isAuthed = authenticate(token, String(MOCK_SERVER_ID));
     expect(isAuthed).toBeFalsy();
   });
 
   test("valid token, incorrect serverID", () => {
-    const token = nanoid();
+    const token = generateAuthToken();
     const isAuthed = authenticate(`BASIC ${token}`, String(MOCK_SERVER_ID).substring(0, String(MOCK_SERVER_ID).length / 2));
     expect(isAuthed).toBeFalsy();
   });

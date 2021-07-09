@@ -1,6 +1,11 @@
+import { nanoid } from "nanoid";
 import Database from "../middleware/Database";
 
 const dbase = new Database();
+
+export const generateAuthToken = (): string => {
+  return nanoid(21);
+};
 
 export const sanitiseAuthToken = (authorisation: string): string | false => {
   const authParts = authorisation.match(/^BASIC ([A-Za-z0-9_-]{21})$/);
