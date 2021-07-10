@@ -21,6 +21,7 @@
     "comma-spacing": ["error", { "before": false, "after": true }],
     "space-in-parens": ["error", "never"],
     "semi-spacing": ["error", {"before": false, "after": true}],
-    "comma-dangle": ["error", "only-multiline"]
+    "comma-dangle": ["error", "only-multiline"],
+    "max-len": ["warn", { "code": 120, "ignoreComments": true, "ignoreTrailingComments": true, "ignoreUrls": true, "ignoreStrings": true, "ignoreTemplateLiterals": true, "ignoreRegExpLiterals": true }]
   }
 }
