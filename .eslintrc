@@ -2,7 +2,8 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "unused-imports"
   ],
   "extends": [
     "eslint:recommended",
@@ -10,6 +11,13 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "unused-imports/no-unused-imports": "warn",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      { "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
+    ],
     "semi":  ["error", "always"],
     "quotes": ["error", "double", { "allowTemplateLiterals": true }],
     "object-curly-spacing": ["error", "always", { "objectsInObjects": false, "arraysInObjects": false }],
