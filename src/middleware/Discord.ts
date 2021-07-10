@@ -1,17 +1,17 @@
-import Discord from "discord.js";
+import { Message, Client, Guild } from "discord.js";
 import parseCommand from "../utils/parseCommand";
 import { success, info, error, br } from "../utils/log";
 import ping from "./Discord/ping";
 import setup from "./Discord/setup";
 
-const bot = new Discord.Client();
+const bot = new Client();
 
 bot.on("ready", () => {
   info(`Logged in as ${bot.user?.tag}!`);
   br();
 });
 
-bot.on("message", (message: Discord.Message) => {
+bot.on("message", (message: Message) => {
   if (message.channel.type !== "dm") {
     switch (parseCommand(message.content)) {
       case "setup":
@@ -30,7 +30,7 @@ bot.on("message", (message: Discord.Message) => {
 });
 
 export class DiscordMiddleware {
-  guild: Promise<Discord.Guild>;
+  guild: Promise<Guild>;
 
   constructor(serverID: number) {
     if (!serverID) return;
