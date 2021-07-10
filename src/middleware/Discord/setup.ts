@@ -1,4 +1,4 @@
-import Discord from "discord.js";
+import { Message, MessageEmbed } from "discord.js";
 import { nanoid } from "nanoid";
 import { warn } from "../../utils/log";
 import Database from "../Database";
@@ -7,7 +7,7 @@ const dbase = new Database();
 const PREFIX: string = process.env.DISCORD_PREFIX || "!muter";
 
 export const generateSetupInstructions = (authToken: string) => (
-  new Discord.MessageEmbed()
+  new MessageEmbed()
     .setColor("#0099ff")
     .setTitle("Let's get you setup")
     // .setURL(`https://${process.env.HOST}/`)
@@ -25,7 +25,7 @@ export const generateSetupInstructions = (authToken: string) => (
     .setFooter("Discord Muter", `https://${process.env.HOST}/images/logo_bordered.png`)
 );
 
-const setup = (message: Discord.Message, overwrite = false) => {
+const setup = (message: Message, overwrite = false) => {
   if (!message.member?.hasPermission("ADMINISTRATOR")) {
     warn("[Server]: I'm just going to ignore this!");
     return;
