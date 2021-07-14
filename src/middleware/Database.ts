@@ -1,6 +1,5 @@
 import dotenv from "dotenv-flow";
 import mysql from "mysql";
-import { error } from "../utils/log";
 
 dotenv.config({
   silent: true
@@ -9,23 +8,6 @@ dotenv.config({
 type DatabaseOptions = {
   databaseURL: string;
 };
-
-type QueryResponse = {
-  success: boolean;
-  reason?: string;
-  results: any;
-}
-
-interface QueryCallback {
-  (response: QueryResponse): void
-}
-
-interface RegisterServerCallback {
-  (
-    success: boolean,
-    reason?: string
-  ): void
-}
 
 class Database {
   options: DatabaseOptions;
@@ -63,7 +45,7 @@ class Database {
         ${mysql.escape(serverID)},
         ${mysql.escape(authToken)}
       );`
-    )
+    );
   }
 
   async getServerID(authToken: string) {
