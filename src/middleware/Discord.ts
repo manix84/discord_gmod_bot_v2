@@ -12,6 +12,8 @@ bot.on("ready", () => {
 });
 
 bot.on("message", (message: Message) => {
+  if (message.author.bot) return; // Ignore bot messages.
+
   if (message.channel.type !== "dm") {
     switch (parseCommand(message.content)) {
       case "setup":
@@ -25,7 +27,7 @@ bot.on("message", (message: Message) => {
         break;
     }
   } else {
-    message.author.send("Sorry, I've no DM'able commands right now.");
+    message.author.send("Sorry, I've no DM'able commands right now.").catch(error);
   }
 });
 
