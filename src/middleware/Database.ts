@@ -61,29 +61,16 @@ class Database {
   }
 
   registerServer(serverID: number, authToken: string, callback: RegisterServerCallback, overwrite = false) {
-    if (overwrite) {
-      this._runQuery(
-        `REPLACE INTO servers (
-          server_id,
-          auth_token
-        ) VALUES (
-          ${mysql.escape(serverID)},
-          ${mysql.escape(authToken)}
-        );`,
-        (response) => callback(response.success, response.reason)
-      );
-    } else {
-      this._runQuery(
-        `INSERT INTO servers (
-          server_id,
-          auth_token
-        ) VALUES (
-          ${mysql.escape(serverID)},
-          ${mysql.escape(authToken)}
-        );`,
-        (response) => callback(response.success, response.reason)
-      );
-    }
+    this._runQuery(
+      `${overwrite ? 'REPLACE' : 'INSERT'} INTO servers (
+        server_id,
+        auth_token
+      ) VALUES (
+        ${mysql.escape(serverID)},
+        ${mysql.escape(authToken)}
+      );`,
+      (response) => callback(response.success, response.reason)
+    );
   }
 
   getServerID(authToken: string) {
