@@ -8,7 +8,7 @@ export const generateAuthToken = (): string => {
 };
 
 export const sanitiseAuthToken = (authorisation: string): string | false => {
-  const authParts = authorisation.match(/^BASIC ([A-Za-z0-9_-]{21})$/);
+  const authParts = authorisation.match(/^BEARER ([A-Za-z0-9_-]{21})$/);
   return authParts && authParts[1] || false;
 };
 

@@ -22,27 +22,27 @@ describe("SanitiseAuthToken", () => {
 
   test("Token: valid", () => {
     const token = generateAuthToken();
-    const result = sanitiseAuthToken(`BASIC ${token}`);
+    const result = sanitiseAuthToken(`BEARER ${token}`);
     expect(result).toBe(token);
   });
 
   test("Token: Too long", () => {
     const token = generateAuthToken() + "abc";
-    const result = sanitiseAuthToken(`BASIC ${token}`);
+    const result = sanitiseAuthToken(`BEARER ${token}`);
     expect(result).toBeFalsy();
   });
 
   test("Token: Too short", () => {
     let token = generateAuthToken();
     token = token.substring(0, token.length - 1);
-    const result = sanitiseAuthToken(`BASIC ${token}`);
+    const result = sanitiseAuthToken(`BEARER ${token}`);
     expect(result).toBeFalsy();
   });
 
   test("Token: Has invalid characters", () => {
     let token = generateAuthToken();
     token = token.substring(0, token.length - 1) + "*";
-    const result = sanitiseAuthToken(`BASIC ${token}`);
+    const result = sanitiseAuthToken(`BEARER ${token}`);
     expect(result).toBeFalsy();
   });
 
@@ -52,13 +52,13 @@ describe("Authenticate", () => {
 
   test("valid", () => {
     const token = generateAuthToken();
-    const isAuthed = authenticate(`BASIC ${token}`, String(MOCK_SERVER_ID));
+    const isAuthed = authenticate(`BEARER ${token}`, String(MOCK_SERVER_ID));
     expect(isAuthed).toBeTruthy();
   });
 
   test("missing serverID", () => {
     const token = generateAuthToken();
-    const isAuthed = authenticate(`BASIC ${token}`);
+    const isAuthed = authenticate(`BEARER ${token}`);
     expect(isAuthed).toBeFalsy();
   });
 
@@ -75,7 +75,7 @@ describe("Authenticate", () => {
 
   test("valid token, incorrect serverID", () => {
     const token = generateAuthToken();
-    const isAuthed = authenticate(`BASIC ${token}`, String(MOCK_SERVER_ID).substring(0, String(MOCK_SERVER_ID).length / 2));
+    const isAuthed = authenticate(`BEARER ${token}`, String(MOCK_SERVER_ID).substring(0, String(MOCK_SERVER_ID).length / 2));
     expect(isAuthed).toBeFalsy();
   });
 
