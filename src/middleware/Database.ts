@@ -55,6 +55,15 @@ class Database {
       WHERE auth_token = ${mysql.escape(authToken)};`
     );
   }
+
+  async getUserID(steamUserID: string) {
+    return await this._runQuery(
+      `SELECT discord_user_id
+      FROM users
+      WHERE steam_user_id = ${escape(steamUserID)};`
+    );
+  }
+
 }
 
 export default Database;

@@ -60,4 +60,17 @@ describe("Database", () => {
     expect(mysql.createConnection).toHaveBeenCalledTimes(2);
   });
 
+  test("getUserID", async () => {
+    console.log = jest.fn();
+    const dBase = new Database();
+    expect(dBase.getUserID).toBeDefined();
+    try {
+      await dBase.getUserID("12345678901234567890");
+    } catch (err) {
+      expect(err).toEqual(Error("MySQL Error"));
+    }
+    await dBase.getUserID("12345678901234567890");
+    expect(mysql.createConnection).toHaveBeenCalledTimes(2);
+  });
+
 });
