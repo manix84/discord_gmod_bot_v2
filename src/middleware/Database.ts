@@ -36,53 +36,42 @@ class Database {
     }, options);
   }
 
-  _connect(): mysql.Connection {
+  private _connection = () => {
     const connection = mysql.createConnection(this.options.databaseURL);
     connection.connect();
     return connection;
-  }
+  };
 
-  _runQuery(query: string, callback?: QueryCallback) {
-    const connection = this._connect();
-    connection.query({
-      sql: query,
-      timeout: 2500, // 2.5s
-    }, (err, results) => {
-      if (err) error("err", err);
-      if (callback) {
-        callback({
-          success: !err,
-          reason: err && err.code || undefined,
-          results
-        });
-      }
-    });
-    connection.end();
-  }
+  private _runQuery = (query: string) =>
+    new Promise((resolve, reject) => {
+      const connection = this._connection();
+      connection.query(query, (err, rows) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(rows);
+      });
+      connection.end();
+    })
 
-  registerServer(serverID: number, authToken: string, callback: RegisterServerCallback, overwrite = false) {
-    this._runQuery(
-      `${overwrite ? 'REPLACE' : 'INSERT'} INTO servers (
+  async registerServer(serverID: number, authToken: string, overwrite = false) {
+    return await this._runQuery(
+      `${overwrite ? "REPLACE" : "INSERT"} INTO servers (
         server_id,
         auth_token
       ) VALUES (
         ${mysql.escape(serverID)},
         ${mysql.escape(authToken)}
-      );`,
-      (response) => callback(response.success, response.reason)
-    );
+      );`
+    )
   }
 
-  getServerID(authToken: string) {
-    let output;
-    this._runQuery(
+  async getServerID(authToken: string) {
+    return await this._runQuery(
       `SELECT auth_token
       FROM servers
-      WHERE auth_token = ${mysql.escape(authToken)};`,
-      (response) => output = response
+      WHERE auth_token = ${mysql.escape(authToken)};`
     );
-    console.log("output", output);
-    return output;
   }
 }
 

@@ -1,6 +1,7 @@
 import { Message, MessageEmbed } from "discord.js";
+import { MysqlError } from "mysql";
 import { nanoid } from "nanoid";
-import { warn } from "../../utils/log";
+import { error, warn } from "../../utils/log";
 import Database from "../Database";
 
 const dbase = new Database();
@@ -31,16 +32,19 @@ const setup = (message: Message, overwrite = false) => {
     return;
   }
   const authToken = nanoid();
-  dbase.registerServer(Number(message.guild?.id), authToken, (success, reason) => {
-    if (success) {
-      message.author.send(generateSetupInstructions(authToken));
-    } else if (reason === "ER_DUP_ENTRY") {
-      message.author.send(`If looks like the host is already connected. If you're sure you want to re-register, please run \`${PREFIX} re-setup\`.`);
-    } else {
-      message.author.send("Something went wrong. This is probably an internal issue. We've notified the Code-Monkeys.");
-    }
-    message.channel.send("Check your private messages for setup instructions.");
-  }, overwrite);
+  dbase.registerServer(Number(message.guild?.id), authToken, overwrite)
+    .then(() => {
+      message.author.send(generateSetupInstructions(authToken)).catch(error);
+      message.channel.send("Check your direct messages for setup instructions.").catch(error);
+    }).catch((err: MysqlError) => {
+      let friendlyMessage = "Something went wrong. This is probably an internal issue. We've notified the Code-Monkeys.";
+      switch (err.code) {
+        case "ER_DUP_ENTRY":
+          friendlyMessage = `If looks like the host is already connected. If you're sure you want to re-register, please run \`${PREFIX} re-setup\`.`;
+          break;
+      }
+      message.author.send(friendlyMessage).catch(error);
+    });
 };
 
 export default setup;
