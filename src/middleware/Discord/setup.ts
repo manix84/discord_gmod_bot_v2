@@ -28,7 +28,8 @@ export const generateSetupInstructions = (authToken: string) => (
 
 const setup = (message: Message, overwrite = false) => {
   if (!message.member?.hasPermission("ADMINISTRATOR")) {
-    warn("[Server]: I'm just going to ignore this!");
+    warn(`${message.member?.displayName} (${message.member?.id}): "${message.content}"`);
+    warn("[Server]: Not an Admin, so i'm just going to ignore this!");
     return;
   }
   const authToken = nanoid();
