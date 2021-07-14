@@ -1,5 +1,5 @@
 import dotenv from "dotenv-flow";
-import mysql from "mysql";
+import mysql, { escape } from "mysql";
 
 dotenv.config({
   silent: true
