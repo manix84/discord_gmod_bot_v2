@@ -52,8 +52,8 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
     });
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
-app.post("/servers/:serverID/users/:userID/:command", (request, response) => {
-  const { serverID, userID, command } = request.params;
+app.post("/servers/:serverID/users/:steamUserID/:command", (request, response) => {
+  const { serverID, steamUserID, command } = request.params;
   const { authorization } = request.headers;
   const validCommands = ["mute", "unmute", "deafen", "undeafen"];
   const vettedCommand = validCommands.includes(command) && command;
@@ -66,7 +66,7 @@ app.post("/servers/:serverID/users/:userID/:command", (request, response) => {
       .status(200)
       .json({
         serverID,
-        userID,
+        steamUserID,
         vettedCommand
       });
   } else {
