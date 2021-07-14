@@ -50,7 +50,7 @@ class Database {
 
   async getServerID(authToken: string) {
     return await this._runQuery(
-      `SELECT auth_token
+      `SELECT server_id
       FROM servers
       WHERE auth_token = ${mysql.escape(authToken)};`
     );
