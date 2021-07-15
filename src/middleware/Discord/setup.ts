@@ -41,7 +41,7 @@ const setup = (message: Message, overwrite = false) => {
       let friendlyMessage = "Something went wrong. This is probably an internal issue. We've notified the Code-Monkeys.";
       switch (err.code) {
         case "ER_DUP_ENTRY":
-          friendlyMessage = `If looks like the host is already connected. If you're sure you want to re-register, please run \`${PREFIX} re-setup\`.`;
+          friendlyMessage = `If looks like the host is already connected. If you're sure you need a new AuthToken, please run:\`\`\`\n${PREFIX} re-setup\n\`\`\`\n**Remember:** This will invalidate your existing token.`;
           break;
       }
       message.author.send(friendlyMessage).catch(error);
