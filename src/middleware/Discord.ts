@@ -45,26 +45,26 @@ export class DiscordMiddleware {
         if (!member.voice.serverMute) {
           member.voice.setMute(true, reason).then(() => {
             success(
-              "[Mute][Discord:SetMute][Success]",
-              `Muted ${discordMemberID}`
+              "[Mute][Discord:Mute][Success]",
+              `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:SetMute][Error]",
-              `Mute: ${discordMemberID} - ${err}`
+              "[Mute][Discord:Mute][Error]",
+              `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:SetMute][Error]",
-          `Mute: ${discordMemberID} - ${err}`
+          "[Mute][Discord:Mute][Error]",
+          `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:SetMute][Error]",
-        `Mute: ${discordMemberID} - ${err}`
+        "[Mute][Discord:Mute][Error]",
+        `${discordMemberID} - ${err}`
       );
     });
   };
@@ -75,26 +75,26 @@ export class DiscordMiddleware {
         if (member.voice.serverMute) {
           member.voice.setMute(false, reason).then(() => {
             success(
-              "[Mute][Discord:SetUnmute][Success]",
-              `Muted ${discordMemberID}`
+              "[Mute][Discord:Unmute][Success]",
+              `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:SetUnmute][Error]",
-              `Mute: ${discordMemberID} - ${err}`
+              "[Mute][Discord:Unmute][Error]",
+              `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:SetUnmute][Error]",
-          `Mute: ${discordMemberID} - ${err}`
+          "[Mute][Discord:Unmute][Error]",
+          `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:SetUnmute][Error]",
-        `Mute: ${discordMemberID} - ${err}`
+        "[Mute][Discord:Unmute][Error]",
+        `${discordMemberID} - ${err}`
       );
     });
   };
@@ -105,26 +105,26 @@ export class DiscordMiddleware {
         if (!member.voice.serverDeaf) {
           member.voice.setDeaf(true, reason).then(() => {
             success(
-              "[Mute][Discord:SetDeafen][Success]",
-              `Muted ${discordMemberID}`
+              "[Mute][Discord:Deafen][Success]",
+              `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:SetDeafen][Error]",
-              `Mute: ${discordMemberID} - ${err}`
+              "[Mute][Discord:Deafen][Error]",
+              `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:SetDeafen][Error]",
-          `Mute: ${discordMemberID} - ${err}`
+          "[Mute][Discord:Deafen][Error]",
+          `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:SetDeafen][Error]",
-        `Mute: ${discordMemberID} - ${err}`
+        "[Mute][Discord:Deafen][Error]",
+        `${discordMemberID} - ${err}`
       );
     });
   };
@@ -135,26 +135,26 @@ export class DiscordMiddleware {
         if (member.voice.serverDeaf) {
           member.voice.setDeaf(false, reason).then(() => {
             success(
-              "[Mute][Discord:SetDeafen][Success]",
-              `Muted ${discordMemberID}`
+              "[Mute][Discord:Deafen][Success]",
+              `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:SetDeafen][Error]",
-              `Mute: ${discordMemberID} - ${err}`
+              "[Mute][Discord:Deafen][Error]",
+              `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:SetDeafen][Error]",
-          `Mute: ${discordMemberID} - ${err}`
+          "[Mute][Discord:Deafen][Error]",
+          `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:SetDeafen][Error]",
-        `Mute: ${discordMemberID} - ${err}`
+        "[Mute][Discord:Deafen][Error]",
+        `${discordMemberID} - ${err}`
       );
     });
   };
