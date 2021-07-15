@@ -8,6 +8,9 @@ dotenv.config({
 type DatabaseOptions = {
   databaseURL: string;
 };
+type QueryResponseRow = {
+  [key: string]: string
+}
 
 class Database {
   options: DatabaseOptions;
@@ -48,20 +51,24 @@ class Database {
     );
   }
 
-  async getServerID(authToken: string) {
+  async getServerID(authToken: string): Promise<string> {
     return await this._runQuery(
       `SELECT server_id
       FROM servers
       WHERE auth_token = ${mysql.escape(authToken)};`
-    );
+    )
+      .then((result: QueryResponseRow[]) => result[0])
+      .then((result: QueryResponseRow) => result.server_id);
   }
 
-  async getUserID(steamUserID: string) {
+  async getUserID(steamUserID: string): Promise<string> {
     return await this._runQuery(
       `SELECT discord_user_id
       FROM users
       WHERE steam_user_id = ${escape(steamUserID)};`
-    );
+    )
+      .then((result: QueryResponseRow[]) => result[0])
+      .then((result: QueryResponseRow) => result.discord_user_id);
   }
 
 }

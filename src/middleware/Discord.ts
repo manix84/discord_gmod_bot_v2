@@ -34,12 +34,12 @@ bot.on("message", (message: Message) => {
 export class DiscordMiddleware {
   guild: Promise<Guild>;
 
-  constructor(serverID: number) {
+  constructor(serverID: string) {
     if (!serverID) return;
-    this.guild = bot.guilds.fetch(`${serverID}`);
+    this.guild = bot.guilds.fetch(serverID);
   }
 
-  mutePlayer = (discordMemberID: number, reason?: string): void => {
+  mutePlayer = (discordMemberID: string, reason?: string): void => {
     this.guild.then(discordGuild => {
       discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
         if (!member.voice.serverMute) {

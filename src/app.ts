@@ -3,8 +3,12 @@ import { nanoid } from "nanoid";
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv-flow";
-import { init as initDiscord } from "./middleware/Discord";
+import { DiscordMiddleware, init as initDiscord } from "./middleware/Discord";
 import authenticate from "./utils/authentication";
+import Database from "./middleware/Database";
+import { error } from "./utils/log";
+
+const dbase = new Database();
 
 dotenv.config({
   silent: true
@@ -52,21 +56,33 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
     });
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
-app.post("/servers/:serverID/users/:steamUserID/:command", (request, response) => {
+app.post("/servers/:serverID/users/:steamUserID/:command", async (request, response) => {
   const { serverID, steamUserID, command } = request.params;
   const { authorization } = request.headers;
   const validCommands = ["mute", "unmute", "deafen", "undeafen"];
   const vettedCommand = validCommands.includes(command) && command;
-  if (!vettedCommand) {
+  const discordUserID = await dbase.getUserID(steamUserID).catch(error);
+  if (!vettedCommand || !discordUserID) {
     response
       .status(404)
       .send();
-  } else if (authenticate(authorization, serverID)) {
+  } else if (await authenticate(authorization, serverID)) {
+    const discordServer = new DiscordMiddleware(serverID);
+    switch (vettedCommand) {
+      case "mute":
+        console.log("discordUserID", discordUserID);
+        discordServer.mutePlayer(discordUserID);
+        break;
+      case "unmute":
+      case "deafen":
+      case "undeafen":
+    }
     response
       .status(200)
       .json({
         serverID,
         steamUserID,
+        discordUserID,
         vettedCommand
       });
   } else {
