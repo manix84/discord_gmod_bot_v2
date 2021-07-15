@@ -69,6 +69,96 @@ export class DiscordMiddleware {
     });
   };
 
+  unmutePlayer = (discordMemberID: string, reason?: string): void => {
+    this.guild.then(discordGuild => {
+      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+        if (member.voice.serverMute) {
+          member.voice.setMute(false, reason).then(() => {
+            success(
+              "[Mute][Discord:SetUnmute][Success]",
+              `Muted ${discordMemberID}`
+            );
+          }).catch((err) => {
+            error(
+              "[Mute][Discord:SetUnmute][Error]",
+              `Mute: ${discordMemberID} - ${err}`
+            );
+          });
+        }
+      }).catch((err) => {
+        error(
+          "[Mute][Discord:SetUnmute][Error]",
+          `Mute: ${discordMemberID} - ${err}`
+        );
+      });
+    }).catch((err) => {
+      error(
+        "[Mute][Discord:SetUnmute][Error]",
+        `Mute: ${discordMemberID} - ${err}`
+      );
+    });
+  };
+
+  deafenPlayer = (discordMemberID: string, reason?: string): void => {
+    this.guild.then(discordGuild => {
+      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+        if (!member.voice.serverDeaf) {
+          member.voice.setDeaf(true, reason).then(() => {
+            success(
+              "[Mute][Discord:SetDeafen][Success]",
+              `Muted ${discordMemberID}`
+            );
+          }).catch((err) => {
+            error(
+              "[Mute][Discord:SetDeafen][Error]",
+              `Mute: ${discordMemberID} - ${err}`
+            );
+          });
+        }
+      }).catch((err) => {
+        error(
+          "[Mute][Discord:SetDeafen][Error]",
+          `Mute: ${discordMemberID} - ${err}`
+        );
+      });
+    }).catch((err) => {
+      error(
+        "[Mute][Discord:SetDeafen][Error]",
+        `Mute: ${discordMemberID} - ${err}`
+      );
+    });
+  };
+
+  undeafenPlayer = (discordMemberID: string, reason?: string): void => {
+    this.guild.then(discordGuild => {
+      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+        if (member.voice.serverDeaf) {
+          member.voice.setDeaf(false, reason).then(() => {
+            success(
+              "[Mute][Discord:SetDeafen][Success]",
+              `Muted ${discordMemberID}`
+            );
+          }).catch((err) => {
+            error(
+              "[Mute][Discord:SetDeafen][Error]",
+              `Mute: ${discordMemberID} - ${err}`
+            );
+          });
+        }
+      }).catch((err) => {
+        error(
+          "[Mute][Discord:SetDeafen][Error]",
+          `Mute: ${discordMemberID} - ${err}`
+        );
+      });
+    }).catch((err) => {
+      error(
+        "[Mute][Discord:SetDeafen][Error]",
+        `Mute: ${discordMemberID} - ${err}`
+      );
+    });
+  };
+
 }
 
 export const init = (token?: string): void => {

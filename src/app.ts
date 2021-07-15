@@ -73,8 +73,14 @@ app.post("/servers/:serverID/users/:steamUserID/:command", async (request, respo
         discordServer.mutePlayer(discordUserID);
         break;
       case "unmute":
+        discordServer.unmutePlayer(discordUserID);
+        break;
       case "deafen":
+        discordServer.deafenPlayer(discordUserID);
+        break;
       case "undeafen":
+        discordServer.undeafenPlayer(discordUserID);
+        break;
     }
     response
       .status(200)
