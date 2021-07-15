@@ -59,6 +59,7 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
 app.post("/servers/:serverID/users/:steamUserID/:command", async (request, response) => {
   const { serverID, steamUserID, command } = request.params;
   const { authorization } = request.headers;
+  const { reason } = request.body;
   const validCommands = ["mute", "unmute", "deafen", "undeafen"];
   const vettedCommand = validCommands.includes(command) && command;
   const discordUserID = await dbase.getUserID(steamUserID).catch(error);
@@ -70,16 +71,16 @@ app.post("/servers/:serverID/users/:steamUserID/:command", async (request, respo
     const discordServer = new DiscordMiddleware(serverID);
     switch (vettedCommand) {
       case "mute":
-        discordServer.mutePlayer(discordUserID);
+        discordServer.mutePlayer(discordUserID, reason);
         break;
       case "unmute":
-        discordServer.unmutePlayer(discordUserID);
+        discordServer.unmutePlayer(discordUserID, reason);
         break;
       case "deafen":
-        discordServer.deafenPlayer(discordUserID);
+        discordServer.deafenPlayer(discordUserID, reason);
         break;
       case "undeafen":
-        discordServer.undeafenPlayer(discordUserID);
+        discordServer.undeafenPlayer(discordUserID, reason);
         break;
     }
     response
