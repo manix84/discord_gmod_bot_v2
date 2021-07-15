@@ -39,7 +39,7 @@ class Database {
       connection.end();
     })
 
-  async registerServer(serverID: number, authToken: string, overwrite = false) {
+  async registerServer(serverID: string, authToken: string, overwrite = false) {
     return await this._runQuery(
       `${overwrite ? "REPLACE" : "INSERT"} INTO servers (
         server_id,

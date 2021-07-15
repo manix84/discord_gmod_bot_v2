@@ -70,7 +70,6 @@ app.post("/servers/:serverID/users/:steamUserID/:command", async (request, respo
     const discordServer = new DiscordMiddleware(serverID);
     switch (vettedCommand) {
       case "mute":
-        console.log("discordUserID", discordUserID);
         discordServer.mutePlayer(discordUserID);
         break;
       case "unmute":

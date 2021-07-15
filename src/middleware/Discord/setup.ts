@@ -33,7 +33,7 @@ const setup = (message: Message, overwrite = false) => {
     return;
   }
   const authToken = nanoid();
-  dbase.registerServer(Number(message.guild?.id), authToken, overwrite)
+  dbase.registerServer(`${message.guild?.id}`, authToken, overwrite)
     .then(() => {
       message.author.send(generateSetupInstructions(authToken)).catch(error);
       message.channel.send("Check your direct messages for setup instructions.").catch(error);

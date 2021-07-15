@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import Database from "../middleware/Database";
-import { error, info, success } from "./log";
+import { error } from "./log";
 
 const dbase = new Database();
 
@@ -14,26 +14,15 @@ export const sanitiseAuthToken = (authorisation: string): string | false => {
 };
 
 const authenticate = async (authToken?: string, serverID?: string): Promise<boolean> => {
-  if (!authToken || !serverID) {
-    error("missing authToken or serverID");
-    return false;
-  }
+  if (!authToken || !serverID) return false;
+
   const sanitisedAuthToken = sanitiseAuthToken(authToken);
-  if (!sanitisedAuthToken) {
-    error("un-sanitary");
-    return false;
-  }
+  if (!sanitisedAuthToken) return false;
 
   const authedServerID = await dbase.getServerID(sanitisedAuthToken)
-    .catch(() => {
-      return false;
-    });
-  // const authedServerID = row.length > 0 && row[0].server_id;
-  info("authedServerID", JSON.stringify(authedServerID));
-  if (Number(authedServerID) === Number(serverID)) {
-    success("authed!!");
-    return true;
-  }
+    .catch(error);
+
+  if (authedServerID === serverID) return true;
 
   return false;
 };
