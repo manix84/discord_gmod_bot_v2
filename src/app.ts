@@ -7,6 +7,7 @@ import { DiscordMiddleware, init as initDiscord } from "./middleware/Discord";
 import authenticate from "./utils/authentication";
 import Database from "./middleware/Database";
 import { error } from "./utils/log";
+import { generateSuccessResponse } from "./utils/responseBody";
 
 const dbase = new Database();
 
@@ -86,12 +87,7 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
     }
     response
       .status(200)
-      .json({
-        serverID,
-        steamUserID,
-        discordUserID,
-        vettedAction
-      });
+      .json(generateSuccessResponse());
   } else {
     response
       .status(403)
