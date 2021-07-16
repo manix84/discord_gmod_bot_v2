@@ -11,6 +11,9 @@ type DatabaseOptions = {
 type QueryResponseRow = {
   [key: string]: string
 }
+type DiscordUserID = string;
+type SteamUserID = string;
+type LinkToken = string;
 
 class Database {
   options: DatabaseOptions;
@@ -69,6 +72,30 @@ class Database {
     )
       .then((result: QueryResponseRow[]) => result[0])
       .then((result: QueryResponseRow) => result.discord_user_id);
+  }
+
+  async registerDiscordUser(
+    discordUserID: DiscordUserID,
+    linkToken: LinkToken,
+    isNewLinkToken: boolean
+  ) {
+    if (!isNewLinkToken) {
+      return await this._runQuery(`
+        UPDATE users
+        SET discord_user_id = ${escape(discordUserID)}
+        WHERE link_token = ${escape(linkToken)};
+      `);
+    } else {
+      return await this._runQuery(`
+        INSERT INTO users (
+          discord_user_id,
+          link_token
+        ) VALUES (
+          ${escape(discordUserID)},
+          ${escape(linkToken)}
+        );
+      `);
+    }
   }
 
 }

@@ -3,6 +3,7 @@ import parseCommand from "../utils/parseCommand";
 import { success, info, error, br } from "../utils/log";
 import ping from "./Discord/ping";
 import setup from "./Discord/setup";
+import link from "./Discord/link";
 
 const bot = new Client();
 
@@ -21,6 +22,9 @@ bot.on("message", (message: Message) => {
         break;
       case "re-setup":
         setup(message, true);
+        break;
+      case "link":
+        link(message);
         break;
       case "ping":
         ping(message);
