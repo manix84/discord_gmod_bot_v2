@@ -7,7 +7,11 @@ interface ErrorResponse extends GenericResponse {
 }
 interface SuccessResponse extends GenericResponse {
   success: true;
+  [key: string]: any;
 }
+export type Params = {
+  [key: string]: any;
+};
 export type Response = ErrorResponse | SuccessResponse;
 export type ErrorObj = {
   code: string;
@@ -23,7 +27,8 @@ export const generateErrorResponse = (error: ErrorObj): ErrorResponse => ({
   }
 });
 
-export const generateSuccessResponse = (): SuccessResponse => ({
+export const generateSuccessResponse = (params: Params): SuccessResponse => ({
   timestamp: new Date().toISOString(),
-  success: true
+  success: true,
+  params
 });

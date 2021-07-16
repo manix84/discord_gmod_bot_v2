@@ -30,31 +30,31 @@ app.get("/servers/:serverID", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
-    .json({
+    .json(generateSuccessResponse({
       action: "confirm server existance",
       serverID
-    });
+    }));
 });
 // GET /servers/<uid>/users 200 | 403 | 404
 app.get("/servers/:serverID/users", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
-    .json({
-      action: "list users",
+    .json(generateSuccessResponse({
+      action: "list active voice users",
       serverID
-    });
+    }));
 });
 // GET /servers/<uid>/users/<uid> 200 | 403 | 404
 app.get("/servers/:serverID/users/:userID", (request, response) => {
   const { serverID, userID } = request.params;
   response
     .status(200)
-    .json({
+    .json(generateSuccessResponse({
       action: "confirm user existance",
       serverID,
       userID
-    });
+    }));
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
 app.post("/servers/:serverID/users/:steamUserID/:action", async (request, response) => {
@@ -87,7 +87,10 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
     }
     response
       .status(200)
-      .json(generateSuccessResponse());
+      .json(generateSuccessResponse({
+        action,
+        reason
+      }));
   } else {
     response
       .status(403)
