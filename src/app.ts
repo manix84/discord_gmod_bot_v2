@@ -56,20 +56,21 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
     });
 });
 // POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
-app.post("/servers/:serverID/users/:steamUserID/:command", async (request, response) => {
-  const { serverID, steamUserID, command } = request.params;
+app.post("/servers/:serverID/users/:steamUserID/:action", async (request, response) => {
+  const { serverID, steamUserID, action } = request.params;
   const { authorization } = request.headers;
   const { reason } = request.body;
-  const validCommands = ["mute", "unmute", "deafen", "undeafen"];
-  const vettedCommand = validCommands.includes(command) && command;
+  const validActions = ["mute", "unmute", "deafen", "undeafen"];
+  const vettedAction = validActions.includes(action) && action;
   const discordUserID = await dbase.getUserID(steamUserID).catch(error);
-  if (!vettedCommand || !discordUserID) {
+  const isAuthenticated = await authenticate(authorization, serverID);
+  if (!vettedAction || !discordUserID) {
     response
       .status(404)
       .send();
-  } else if (await authenticate(authorization, serverID)) {
+  } else if (isAuthenticated) {
     const discordServer = new DiscordMiddleware(serverID);
-    switch (vettedCommand) {
+    switch (vettedAction) {
       case "mute":
         discordServer.mutePlayer(discordUserID, reason);
         break;
@@ -89,7 +90,7 @@ app.post("/servers/:serverID/users/:steamUserID/:command", async (request, respo
         serverID,
         steamUserID,
         discordUserID,
-        vettedCommand
+        vettedAction
       });
   } else {
     response
