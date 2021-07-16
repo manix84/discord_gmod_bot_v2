@@ -49,25 +49,25 @@ export class DiscordMiddleware {
         if (!member.voice.serverMute) {
           member.voice.setMute(true, reason).then(() => {
             success(
-              "[Mute][Discord:Mute][Success]",
+              "[Discord:Mute][Success]",
               `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:Mute][Error]",
+              "[Discord:Mute][Error]",
               `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:Mute][Error]",
+          "[Discord:Mute][Error]",
           `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:Mute][Error]",
+        "[Discord:Mute][Error]",
         `${discordMemberID} - ${err}`
       );
     });
@@ -79,25 +79,25 @@ export class DiscordMiddleware {
         if (member.voice.serverMute) {
           member.voice.setMute(false, reason).then(() => {
             success(
-              "[Mute][Discord:Unmute][Success]",
+              "[Discord:Unmute][Success]",
               `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:Unmute][Error]",
+              "[Discord:Unmute][Error]",
               `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:Unmute][Error]",
+          "[Discord:Unmute][Error]",
           `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:Unmute][Error]",
+        "[Discord:Unmute][Error]",
         `${discordMemberID} - ${err}`
       );
     });
@@ -109,25 +109,25 @@ export class DiscordMiddleware {
         if (!member.voice.serverDeaf) {
           member.voice.setDeaf(true, reason).then(() => {
             success(
-              "[Mute][Discord:Deafen][Success]",
+              "[Discord:Deafen][Success]",
               `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:Deafen][Error]",
+              "[Discord:Deafen][Error]",
               `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:Deafen][Error]",
+          "[Discord:Deafen][Error]",
           `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:Deafen][Error]",
+        "[Discord:Deafen][Error]",
         `${discordMemberID} - ${err}`
       );
     });
@@ -139,25 +139,25 @@ export class DiscordMiddleware {
         if (member.voice.serverDeaf) {
           member.voice.setDeaf(false, reason).then(() => {
             success(
-              "[Mute][Discord:Deafen][Success]",
+              "[Discord:Undeafen][Success]",
               `${member.displayName} <@${discordMemberID}>`
             );
           }).catch((err) => {
             error(
-              "[Mute][Discord:Deafen][Error]",
+              "[Discord:Undeafen][Error]",
               `${discordMemberID} - ${err}`
             );
           });
         }
       }).catch((err) => {
         error(
-          "[Mute][Discord:Deafen][Error]",
+          "[Discord:Undeafen][Error]",
           `${discordMemberID} - ${err}`
         );
       });
     }).catch((err) => {
       error(
-        "[Mute][Discord:Deafen][Error]",
+        "[Discord:Undeafen][Error]",
         `${discordMemberID} - ${err}`
       );
     });
