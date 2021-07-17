@@ -74,12 +74,12 @@ With payload:
 {
     "action":["mute", "deafen"],
     "reason":"Reason for the change in state",
-    "duration":[0, 2000]
+    "duration":[-1, 2000]
 }
 ```
 
 > Duration in ms until the given action is reverted. The server keeps track of all actions independently, so if there is a mute for 5000ms and a deafen for 3000ms, they will not interfere. Newer requests will override older requests, so if there is an existing mute for 5000ms, and a new one with no timeout gets made, the old timer is discarded and the mute will not be removed until a new request is sent.
-A duration of 0 indicates no timeout.
+A duration of -1 indicates no timeout (the modifier will last indefinitely)
 
 > The server will attempt to parse requests as lenient as possible, so if only a single action is taken, there is no need to send an array of actions.
 
@@ -92,7 +92,7 @@ With payload:
 {
     "action":["mute", "deafen"],
     "reason":"Reason for the change in state",
-    "duration":[0, 2000]
+    "duration":[-1, 2000]
 }
 ```
 
