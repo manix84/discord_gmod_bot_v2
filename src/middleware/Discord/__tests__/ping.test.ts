@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import { Message, TextChannel, Client, Guild } from "discord.js";
 import ping from "../ping";
-import { SET_DEBUG_STATE } from '../../../utils/log';
+import { SET_DEBUG_STATE } from "../../../utils/log";
 SET_DEBUG_STATE(true);
 
 jest.mock("discord.js", () => ({
