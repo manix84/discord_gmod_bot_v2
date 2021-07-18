@@ -57,6 +57,41 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
     }));
 });
 
+// POST /servers/<uid>/users/<uid>/link 200 | 403 | 404
+app.post("/servers/:serverID/users/:steamUserID/link", async (request, response) => {
+  const { steamUserID } = request.params;
+  const { linkToken } = request.body;
+  console.log({ body: request.body });
+  if (!linkToken) {
+    response
+      .status(406)
+      .json(generateErrorResponse(request, {
+        code: "MISSING_TOKEN",
+        message: "Link Token Missing"
+      }));
+  } else {
+    await dbase.registerSteamUser(steamUserID, linkToken)
+      .then((res) => {
+        if (res.error) {
+          error(JSON.stringify(res.error));
+          response
+            .status(400)
+            .json(generateErrorResponse(request, res.error));
+        } else {
+          response
+            .status(200)
+            .json(generateSuccessResponse(request, res));
+        }
+      })
+      .catch((err) => {
+        error(JSON.stringify(err));
+        response
+          .status(400)
+          .json(generateErrorResponse(request, err));
+      });
+  }
+});
+
 // POST /servers/<uid>/users/<uid>/<action> 200 | 403 | 404
 app.post("/servers/:serverID/users/:steamUserID/:action", async (request, response) => {
   const { serverID, steamUserID, action } = request.params;

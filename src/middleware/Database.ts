@@ -100,8 +100,32 @@ class Database {
       );
     `);
   }
-  }
 
+  async registerSteamUser(
+    steamUserID: SteamUserID,
+    linkToken: LinkToken
+  ) {
+    return await this._runQuery(`
+      UPDATE users
+      SET steam_user_id = ${escape(steamUserID)}
+      WHERE link_token = ${escape(linkToken)};
+    `)
+      .then((result: QuerySuccessResponse) => {
+        if (!result.affectedRows) {
+          return { error: {
+            code: "UNKNOWN_TOKEN",
+            message: "Your Link Token can't be found."
+          }};
+        } else if (!result.changedRows) {
+          return { error: {
+            code: "ALREADY_LINKED",
+            message: "You appear to already be linked."
+          }};
+        } else {
+          return { success: true };
+        }
+      });
+  }
 }
 
 export default Database;
