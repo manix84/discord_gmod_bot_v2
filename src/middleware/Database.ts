@@ -8,9 +8,20 @@ dotenv.config({
 type DatabaseOptions = {
   databaseURL: string;
 };
-type QueryResponseRow = {
+type QuerySuccessResponse = {
+  "fieldCount": number;
+  "affectedRows": number;
+  "insertId": number;
+  "serverStatus": number;
+  "warningCount": number;
+  "message": string,
+  "protocol41": boolean,
+  "changedRows": number
+}
+type QuerySelectResponseRow = {
   [key: string]: string
 }
+type QueryResponse = QuerySelectResponseRow[] | QuerySuccessResponse;
 type DiscordUserID = string;
 type SteamUserID = string;
 type LinkToken = string;
@@ -30,7 +41,7 @@ class Database {
     return connection;
   };
 
-  private _runQuery = (query: string) =>
+  private _runQuery = (query: string): Promise<QueryResponse> =>
     new Promise((resolve, reject) => {
       const connection = this._connection();
       connection.query(query, (err, rows) => {
@@ -60,8 +71,8 @@ class Database {
       FROM servers
       WHERE auth_token = ${mysql.escape(authToken)};`
     )
-      .then((result: QueryResponseRow[]) => result[0])
-      .then((result: QueryResponseRow) => result.server_id);
+      .then((result: QuerySelectResponseRow[]) => result[0])
+      .then((result: QuerySelectResponseRow) => result.server_id);
   }
 
   async getUserID(steamUserID: string): Promise<string> {
@@ -70,8 +81,9 @@ class Database {
       FROM users
       WHERE steam_user_id = ${escape(steamUserID)};`
     )
-      .then((result: QueryResponseRow[]) => result[0])
-      .then((result: QueryResponseRow) => result.discord_user_id);
+      .then((result: QuerySelectResponseRow[]) => result[0])
+      .then((result: QuerySelectResponseRow) => result.discord_user_id);
+  }
   }
 
   async registerDiscordUser(

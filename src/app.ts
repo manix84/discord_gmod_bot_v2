@@ -7,7 +7,7 @@ import { DiscordMiddleware, init as initDiscord } from "./middleware/Discord";
 import authenticate from "./utils/authentication";
 import Database from "./middleware/Database";
 import { error } from "./utils/log";
-import { ErrorObj, generateErrorResponse, generateSuccessResponse } from "./utils/responseBody";
+import { generateErrorResponse, generateSuccessResponse } from "./utils/responseBody";
 
 const dbase = new Database();
 
