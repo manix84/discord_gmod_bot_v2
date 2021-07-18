@@ -25,7 +25,7 @@ export const generateLinkInstructions = (linkToken: string) => (
 const link = (message: Message) => {
   const linkToken = generateLinkToken();
   const discordUserID = message.author.id;
-  dbase.registerDiscordUser(discordUserID, linkToken, true)
+  dbase.registerDiscordUser(discordUserID, linkToken)
     .then(() => {
       message.channel.send(`<@${message.author.id}>: Check your direct messages for linking instructions.`).catch(error);
       message.author.send(generateLinkInstructions(linkToken)).catch(error);
