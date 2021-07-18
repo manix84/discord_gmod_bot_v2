@@ -1,5 +1,5 @@
 import { Message, MessageEmbed } from "discord.js";
-import { nanoid } from "nanoid";
+import { generateLinkToken } from "../../utils/linkToken";
 import { error } from "../../utils/log";
 import Database from "../Database";
 
@@ -23,7 +23,7 @@ export const generateLinkInstructions = (linkToken: string) => (
 );
 
 const link = (message: Message) => {
-  const linkToken = nanoid(4);
+  const linkToken = generateLinkToken();
   const discordUserID = message.author.id;
   dbase.registerDiscordUser(discordUserID, linkToken, true)
     .then(() => {
