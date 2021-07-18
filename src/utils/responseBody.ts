@@ -1,5 +1,8 @@
+import { Request } from "express";
+
 interface GenericResponse {
   timestamp: string;
+  path: string;
 }
 interface ErrorResponse extends GenericResponse {
   success: false;
@@ -18,8 +21,9 @@ export type ErrorObj = {
   message: string;
 }
 
-export const generateErrorResponse = (error: ErrorObj): ErrorResponse => ({
+export const generateErrorResponse = (request: Request, error: ErrorObj): ErrorResponse => ({
   timestamp: new Date().toISOString(),
+  path: request.path,
   success: false,
   error: {
     code: error.code,
@@ -27,8 +31,9 @@ export const generateErrorResponse = (error: ErrorObj): ErrorResponse => ({
   }
 });
 
-export const generateSuccessResponse = (params: Params): SuccessResponse => ({
+export const generateSuccessResponse = (request: Request, params: Params): SuccessResponse => ({
   timestamp: new Date().toISOString(),
+  path: request.path,
   success: true,
   params
 });

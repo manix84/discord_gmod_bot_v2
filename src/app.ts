@@ -7,7 +7,7 @@ import { DiscordMiddleware, init as initDiscord } from "./middleware/Discord";
 import authenticate from "./utils/authentication";
 import Database from "./middleware/Database";
 import { error } from "./utils/log";
-import { generateSuccessResponse } from "./utils/responseBody";
+import { ErrorObj, generateErrorResponse, generateSuccessResponse } from "./utils/responseBody";
 
 const dbase = new Database();
 
@@ -30,7 +30,7 @@ app.get("/servers/:serverID", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
-    .json(generateSuccessResponse({
+    .json(generateSuccessResponse(request, {
       action: "confirm server existance",
       serverID
     }));
@@ -40,7 +40,7 @@ app.get("/servers/:serverID/users", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
-    .json(generateSuccessResponse({
+    .json(generateSuccessResponse(request, {
       action: "list active voice users",
       serverID
     }));
@@ -50,13 +50,14 @@ app.get("/servers/:serverID/users/:userID", (request, response) => {
   const { serverID, userID } = request.params;
   response
     .status(200)
-    .json(generateSuccessResponse({
+    .json(generateSuccessResponse(request, {
       action: "confirm user existance",
       serverID,
       userID
     }));
 });
-// POST /servers/<uid>/users/<uid>/mute 200 | 403 | 404
+
+// POST /servers/<uid>/users/<uid>/<action> 200 | 403 | 404
 app.post("/servers/:serverID/users/:steamUserID/:action", async (request, response) => {
   const { serverID, steamUserID, action } = request.params;
   const { authorization } = request.headers;
