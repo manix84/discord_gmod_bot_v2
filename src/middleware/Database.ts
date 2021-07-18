@@ -88,26 +88,18 @@ class Database {
 
   async registerDiscordUser(
     discordUserID: DiscordUserID,
-    linkToken: LinkToken,
-    isNewLinkToken: boolean
+    linkToken: LinkToken
   ) {
-    if (!isNewLinkToken) {
-      return await this._runQuery(`
-        UPDATE users
-        SET discord_user_id = ${escape(discordUserID)}
-        WHERE link_token = ${escape(linkToken)};
-      `);
-    } else {
-      return await this._runQuery(`
-        INSERT INTO users (
-          discord_user_id,
-          link_token
-        ) VALUES (
-          ${escape(discordUserID)},
-          ${escape(linkToken)}
-        );
-      `);
-    }
+    return await this._runQuery(`
+      INSERT INTO users (
+        discord_user_id,
+        link_token
+      ) VALUES (
+        ${escape(discordUserID)},
+        ${escape(linkToken)}
+      );
+    `);
+  }
   }
 
 }
