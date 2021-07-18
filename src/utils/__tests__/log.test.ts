@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import { log, br, success, fail, info, warn, error, SET_DEBUG_STATE } from "../log";
+import logger, { log, br, success, fail, info, warn, error } from "../log";
 
 console.log = jest.fn();
 
 describe("Logs.js :: DEBUG=true", () => {
   beforeAll(() => {
     jest.resetModules();
-    SET_DEBUG_STATE(true);
+    logger(true);
   });
 
   test("log", () => {
@@ -55,7 +55,7 @@ describe("Logs.js :: DEBUG=true", () => {
 describe("Logs.js :: DEBUG=false", () => {
   beforeAll(() => {
     jest.resetModules();
-    SET_DEBUG_STATE(false);
+    logger(false);
   });
 
   test("log", () => {

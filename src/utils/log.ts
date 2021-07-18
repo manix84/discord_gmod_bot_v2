@@ -7,45 +7,34 @@ dotenv.config({
 
 let DEBUG = Boolean(process.env.DEBUG === "true");
 
-const SET_DEBUG_STATE = (state: boolean): void => {
+const setDebugState = (state: boolean): void => {
   DEBUG = Boolean(state);
 };
 
-const log = (...msgs: any): void => {
-  if (DEBUG) console.log(...msgs);
-};
+const cleanMessages = (...msgs: any) =>
+  msgs.map((val: any) =>
+    (typeof val[0] === "object") ? JSON.stringify(val[0]) : val[0]
+  );
 
-const success = (...msgs: any): void => {
-  if (DEBUG) console.log(chalk.green(...msgs));
-};
+export const log = (...msgs: any): boolean | void =>
+  DEBUG && console.log(...cleanMessages(msgs));
 
-const warn = (...msgs: any): void => {
-  if (DEBUG) console.warn(chalk.yellow(...msgs));
-};
+export const success = (...msgs: any): boolean | void =>
+  DEBUG && console.log(chalk.green(...cleanMessages(msgs)));
 
-const info = (...msgs: any): void => {
-  if (DEBUG) console.info(chalk.blue(...msgs));
-};
+export const warn = (...msgs: any): boolean | void =>
+  DEBUG && console.warn(chalk.yellow(...cleanMessages(msgs)));
 
-const fail = (...msgs: any): void => {
-  if (DEBUG) console.log(chalk.red(...msgs));
-};
+export const info = (...msgs: any): boolean | void =>
+  DEBUG && console.info(chalk.blue(...cleanMessages(msgs)));
 
-const br = (): void => {
-  if (DEBUG) console.log();
-};
+export const fail = (...msgs: any): boolean | void =>
+  DEBUG && console.log(chalk.red(...cleanMessages(msgs)));
 
-const error = (...msgs: any): void => {
-  console.error(chalk.red(...msgs));
-};
+export const br = (): boolean | void =>
+  DEBUG && console.log();
 
-export {
-  log,
-  br,
-  success,
-  fail,
-  info,
-  warn,
-  error,
-  SET_DEBUG_STATE
-};
+export const error = (...msgs: any): void =>
+  console.error(chalk.red(...cleanMessages(msgs)));
+
+export default setDebugState;
