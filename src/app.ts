@@ -74,24 +74,38 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
     const discordServer = new DiscordMiddleware(serverID);
     switch (vettedAction) {
       case "mute":
-        discordServer.mutePlayer(discordUserID, reason);
+        discordServer.mutePlayer(discordUserID, reason)
+          .then((res) => {
+            response
+              .status(200)
+              .json(generateSuccessResponse(request, res));
+          });
         break;
       case "unmute":
-        discordServer.unmutePlayer(discordUserID, reason);
+        discordServer.unmutePlayer(discordUserID, reason)
+          .then((res) => {
+            response
+              .status(200)
+              .json(generateSuccessResponse(request, res));
+          });
         break;
       case "deafen":
-        discordServer.deafenPlayer(discordUserID, reason);
+        discordServer.deafenPlayer(discordUserID, reason)
+          .then((res) => {
+            response
+              .status(200)
+              .json(generateSuccessResponse(request, res));
+          });
         break;
       case "undeafen":
-        discordServer.undeafenPlayer(discordUserID, reason);
+        discordServer.undeafenPlayer(discordUserID, reason)
+          .then((res) => {
+            response
+              .status(200)
+              .json(generateSuccessResponse(request, res));
+          });
         break;
     }
-    response
-      .status(200)
-      .json(generateSuccessResponse({
-        action,
-        reason
-      }));
   } else {
     response
       .status(403)

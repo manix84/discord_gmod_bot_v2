@@ -5,6 +5,10 @@ import ping from "./Discord/ping";
 import setup from "./Discord/setup";
 import link from "./Discord/link";
 
+interface ActionResponse {
+  success: boolean;
+}
+
 const bot = new Client();
 
 bot.on("ready", () => {
@@ -43,125 +47,105 @@ export class DiscordMiddleware {
     this.guild = bot.guilds.fetch(serverID);
   }
 
-  mutePlayer = (discordMemberID: string, reason?: string): void => {
-    this.guild.then(discordGuild => {
-      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-        if (!member.voice.serverMute) {
-          member.voice.setMute(true, reason).then(() => {
-            success(
-              "[Discord:Mute][Success]",
-              `${member.displayName} <@${discordMemberID}>`
-            );
-          }).catch((err) => {
-            error(
-              "[Discord:Mute][Error]",
-              `${discordMemberID} - ${err}`
-            );
-          });
-        }
+  mutePlayer = (discordMemberID: string, reason?: string): Promise<ActionResponse> =>
+    new Promise((resolve, reject) => {
+      this.guild.then(discordGuild => {
+        discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+          if (!member.voice.serverMute) {
+            member.voice.setMute(true, reason).then(() => {
+              success("[Discord:Mute][Success]", `${member.displayName} <@${discordMemberID}>`);
+              resolve({ success: true });
+            }).catch((err) => {
+              error("[Discord:Mute][Error]", `${discordMemberID} - ${err}`);
+              reject({ error: { code: err.code, message: err.message }});
+            });
+          } else {
+            resolve({ success: true });
+          }
+        }).catch((err) => {
+          error("[Discord:Mute][Error]", `${discordMemberID} - ${err}`);
+          reject({ error: { code: err.code, message: err.message }});
+        });
       }).catch((err) => {
-        error(
-          "[Discord:Mute][Error]",
-          `${discordMemberID} - ${err}`
-        );
+        error("[Discord:Mute][Error]", `${discordMemberID} - ${err}`);
+        reject({ error: { code: err.code, message: err.message }});
       });
-    }).catch((err) => {
-      error(
-        "[Discord:Mute][Error]",
-        `${discordMemberID} - ${err}`
-      );
     });
-  };
 
-  unmutePlayer = (discordMemberID: string, reason?: string): void => {
-    this.guild.then(discordGuild => {
-      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-        if (member.voice.serverMute) {
-          member.voice.setMute(false, reason).then(() => {
-            success(
-              "[Discord:Unmute][Success]",
-              `${member.displayName} <@${discordMemberID}>`
-            );
-          }).catch((err) => {
-            error(
-              "[Discord:Unmute][Error]",
-              `${discordMemberID} - ${err}`
-            );
-          });
-        }
+  unmutePlayer = (discordMemberID: string, reason?: string): Promise<ActionResponse> =>
+    new Promise((resolve, reject) => {
+      this.guild.then(discordGuild => {
+        discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+          if (member.voice.serverMute) {
+            member.voice.setMute(false, reason).then(() => {
+              success("[Discord:Unmute][Success]", `${member.displayName} <@${discordMemberID}>`);
+              resolve({ success: true });
+            }).catch((err) => {
+              error("[Discord:Unmute][Error]", `${discordMemberID} - ${err}`);
+              reject({ error: { code: err.code, message: err.message }});
+            });
+          } else {
+            resolve({ success: true });
+          }
+        }).catch((err) => {
+          error("[Discord:Unmute][Error]", `${discordMemberID} - ${err}`);
+          reject({ error: { code: err.code, message: err.message }});
+        });
       }).catch((err) => {
-        error(
-          "[Discord:Unmute][Error]",
-          `${discordMemberID} - ${err}`
-        );
+        error("[Discord:Unmute][Error]", `${discordMemberID} - ${err}`);
+        reject({ error: { code: err.code, message: err.message }});
       });
-    }).catch((err) => {
-      error(
-        "[Discord:Unmute][Error]",
-        `${discordMemberID} - ${err}`
-      );
     });
-  };
 
-  deafenPlayer = (discordMemberID: string, reason?: string): void => {
-    this.guild.then(discordGuild => {
-      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-        if (!member.voice.serverDeaf) {
-          member.voice.setDeaf(true, reason).then(() => {
-            success(
-              "[Discord:Deafen][Success]",
-              `${member.displayName} <@${discordMemberID}>`
-            );
-          }).catch((err) => {
-            error(
-              "[Discord:Deafen][Error]",
-              `${discordMemberID} - ${err}`
-            );
-          });
-        }
+  deafenPlayer = (discordMemberID: string, reason?: string): Promise<ActionResponse> =>
+    new Promise((resolve, reject) => {
+      this.guild.then(discordGuild => {
+        discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+          if (!member.voice.serverDeaf) {
+            member.voice.setDeaf(true, reason).then(() => {
+              success("[Discord:Deafen][Success]", `${member.displayName} <@${discordMemberID}>`);
+              resolve({ success: true });
+            }).catch((err) => {
+              error("[Discord:Deafen][Error]", `${discordMemberID} - ${err}`);
+              reject({ error: { code: err.code, message: err.message }});
+            });
+          } else {
+            resolve({ success: true });
+          }
+        }).catch((err) => {
+          error("[Discord:Deafen][Error]", `${discordMemberID} - ${err}`);
+          reject({ error: { code: err.code, message: err.message }});
+        });
       }).catch((err) => {
-        error(
-          "[Discord:Deafen][Error]",
-          `${discordMemberID} - ${err}`
-        );
+        error("[Discord:Deafen][Error]", `${discordMemberID} - ${err}`);
+        reject({ error: { code: err.code, message: err.message }});
       });
-    }).catch((err) => {
-      error(
-        "[Discord:Deafen][Error]",
-        `${discordMemberID} - ${err}`
-      );
     });
-  };
 
-  undeafenPlayer = (discordMemberID: string, reason?: string): void => {
-    this.guild.then(discordGuild => {
-      discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-        if (member.voice.serverDeaf) {
-          member.voice.setDeaf(false, reason).then(() => {
-            success(
-              "[Discord:Undeafen][Success]",
-              `${member.displayName} <@${discordMemberID}>`
-            );
-          }).catch((err) => {
-            error(
-              "[Discord:Undeafen][Error]",
-              `${discordMemberID} - ${err}`
-            );
-          });
-        }
+  undeafenPlayer = (discordMemberID: string, reason?: string): Promise<ActionResponse> =>
+    new Promise((resolve, reject) => {
+      this.guild.then(discordGuild => {
+        discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
+          if (member.voice.serverDeaf) {
+            member.voice.setDeaf(false, reason).then(() => {
+              success("[Discord:Undeafen][Success]", `${member.displayName} <@${discordMemberID}>`);
+              resolve({ success: true });
+            }).catch((err) => {
+              error("[Discord:Undeafen][Error]", `${discordMemberID} - ${err}`);
+              reject({ error: { code: err.code, message: err.message }});
+            });
+          } else {
+            resolve({ success: true });
+          }
+        }).catch((err) => {
+          error("[Discord:Undeafen][Error]", `${discordMemberID} - ${err}`);
+          reject({ error: { code: err.code, message: err.message }});
+        });
       }).catch((err) => {
-        error(
-          "[Discord:Undeafen][Error]",
-          `${discordMemberID} - ${err}`
-        );
+        error("[Discord:Undeafen][Error]", `${discordMemberID} - ${err}`);
+        reject({ error: { code: err.code, message: err.message }});
       });
-    }).catch((err) => {
-      error(
-        "[Discord:Undeafen][Error]",
-        `${discordMemberID} - ${err}`
-      );
     });
-  };
 
 }
 
