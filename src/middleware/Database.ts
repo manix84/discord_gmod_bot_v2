@@ -84,7 +84,6 @@ class Database {
       .then((result: QuerySelectResponseRow[]) => result[0])
       .then((result: QuerySelectResponseRow) => result.discord_user_id);
   }
-  }
 
   async registerDiscordUser(
     discordUserID: DiscordUserID,
