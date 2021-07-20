@@ -35,30 +35,57 @@ app.get("/servers/:serverID", (request, response) => {
       serverID
     }));
 });
-// GET /servers/<uid>/users 200 | 403 | 404
-app.get("/servers/:serverID/users", (request, response) => {
+
+// GET /servers/<uid>/channels -> 200 | 404 | 5XX
+app.get("/servers/:serverID/channels", (request, response) => {
   const { serverID } = request.params;
   response
     .status(200)
     .json(generateSuccessResponse(request, {
-      action: "list active voice users",
+      action: "list available voice channels",
       serverID
     }));
 });
+
+// GET /servers/<uid>/channels -> 200 | 404 | 5XX
+app.get("/servers/:serverID/channels/:channelID", (request, response) => {
+  const { serverID, channelID } = request.params;
+  response
+    .status(200)
+    .json(generateSuccessResponse(request, {
+      action: "confirm voice channel existance",
+      serverID,
+      channelID
+    }));
+});
+
+// GET /servers/<uid>/users 200 | 403 | 404
+app.get("/servers/:serverID/channels/:channelID/users", (request, response) => {
+  const { serverID, channelID } = request.params;
+  response
+    .status(200)
+    .json(generateSuccessResponse(request, {
+      action: "list active voice users",
+      serverID,
+      channelID
+    }));
+});
+
 // GET /servers/<uid>/users/<uid> 200 | 403 | 404
-app.get("/servers/:serverID/users/:userID", (request, response) => {
-  const { serverID, userID } = request.params;
+app.get("/servers/:serverID/channels/:channelID/users/:userID", (request, response) => {
+  const { serverID, channelID, userID } = request.params;
   response
     .status(200)
     .json(generateSuccessResponse(request, {
       action: "confirm user existance",
       serverID,
+      channelID,
       userID
     }));
 });
 
 // POST /servers/<uid>/users/<uid>/link 200 | 403 | 404
-app.post("/servers/:serverID/users/:steamUserID/link", async (request, response) => {
+app.post("/servers/:serverID/channels/:channelID/users/:steamUserID/link", async (request, response) => {
   const { steamUserID } = request.params;
   const { linkToken } = request.body;
   console.log({ body: request.body });
@@ -93,8 +120,8 @@ app.post("/servers/:serverID/users/:steamUserID/link", async (request, response)
 });
 
 // POST /servers/<uid>/users/<uid>/<action> 200 | 403 | 404
-app.post("/servers/:serverID/users/:steamUserID/:action", async (request, response) => {
-  const { serverID, steamUserID, action } = request.params;
+app.post("/servers/:serverID/channels/:channelID/users/:steamUserID/:action", async (request, response) => {
+  const { serverID, channelID, steamUserID, action } = request.params;
   const { authorization } = request.headers;
   const { reason } = request.body;
   const validActions = ["mute", "unmute", "deafen", "undeafen"];
@@ -106,7 +133,7 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
       .status(404)
       .send();
   } else if (isAuthenticated) {
-    const discordServer = new DiscordMiddleware(serverID);
+    const discordServer = new DiscordMiddleware(serverID, channelID);
     switch (vettedAction) {
       case "mute":
         discordServer.mutePlayer(discordUserID, reason)

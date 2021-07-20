@@ -2,6 +2,7 @@ import app from "../app";
 import supertest from "supertest";
 
 const MOCK_SERVER_ID = 1234567890;
+const MOCK_CHANNEL_ID = 1234567890;
 
 jest.mock("../middleware/Discord", () => {
   return {
@@ -44,62 +45,70 @@ describe("Test \"/servers\"", () => {
       .expect(200);
   });
 });
-
-describe("Test \"/servers/:serverID/users\"", () => {
-  // GET /servers/:serverID/users 200 | 403 | 404
-  test("GET /servers/:serverID/users", async () => {
+describe("Test \"/servers\"", () => {
+  // GET /servers/:serverID -> 200 | 404 | 5XX
+  test("GET /servers/:serverID/channels", async () => {
     await supertest(app)
-      .get(`/servers/${MOCK_SERVER_ID}/users`)
-      .expect(200);
-  });
-
-  // GET /servers/:serverID/users/:userID 200 | 403 | 404
-  test("GET /servers/:serverID/users/:userID", async () => {
-    await supertest(app)
-      .get(`/servers/${MOCK_SERVER_ID}/users/1`)
+      .get(`/servers/${MOCK_SERVER_ID}`)
       .expect(200);
   });
 });
 
-describe("Test \"/servers/:serverID/users/:userID\" Authorised", () => {
+describe("Test \"/servers/:serverID/channels/:channelID/users\"", () => {
+  // GET /servers/:serverID/channels/:channelID/users 200 | 403 | 404
+  test("GET /servers/:serverID/channels/:channelID/users", async () => {
+    await supertest(app)
+      .get(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users`)
+      .expect(200);
+  });
+
+  // GET /servers/:serverID/channels/:channelID/users/:userID 200 | 403 | 404
+  test("GET /servers/:serverID/channels/:channelID/users/:userID", async () => {
+    await supertest(app)
+      .get(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1`)
+      .expect(200);
+  });
+});
+
+describe("Test \"/servers/:serverID/channels/:channelID/users/:userID\" Authorised", () => {
   const token = "abcdefgHIJKLMN1234567";
 
-  // POST /servers/:serverID/users/:userID/mute 200 | 403 | 404
-  test("POST /servers/:serverID/users/:userID/mute", async () => {
+  // POST /servers/:serverID/channels/:channelID/users/:userID/mute 200 | 403 | 404
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/mute", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/mute`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/mute`)
       .set({ authorization: `BASIC ${token}` })
       .send({})
       .expect(200)
       .then((response) => response.body.command === "mute");
   });
-  test("POST /servers/:serverID/users/:userID/unmute", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/unmute", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/unmute`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/unmute`)
       .set({ authorization: `BASIC ${token}` })
       .send({})
       .expect(200)
       .then((response) => response.body.command === "unmute");
   });
-  test("POST /servers/:serverID/users/:userID/deafen", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/deafen", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/deafen`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/deafen`)
       .set({ authorization: `BASIC ${token}` })
       .send({})
       .expect(200)
       .then((response) => response.body.command === "deafen");
   });
-  test("POST /servers/:serverID/users/:userID/undeafen", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/undeafen", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/undeafen`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/undeafen`)
       .set({ authorization: `BASIC ${token}` })
       .send({})
       .expect(200)
       .then((response) => response.body.command === "undeafen");
   });
-  test("POST /servers/:serverID/users/:userID/invalid", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/invalid", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/invalid`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/invalid`)
       .set({ authorization: `BASIC ${token}` })
       .send({})
       .expect(404);
@@ -107,39 +116,39 @@ describe("Test \"/servers/:serverID/users/:userID\" Authorised", () => {
 });
 
 
-describe("Test \"/servers/:serverID/users/:userID\" Unauthorised", () => {
-  // POST /servers/:serverID/users/:userID/mute 200 | 403 | 404
-  test("POST /servers/:serverID/users/:userID/mute", async () => {
+describe("Test \"/servers/:serverID/channels/:channelID/users/:userID\" Unauthorised", () => {
+  // POST /servers/:serverID/channels/:channelID/users/:userID/mute 200 | 403 | 404
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/mute", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/mute`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/mute`)
       .send({})
       .expect(403)
       .then((response) => response.body.command === "mute");
   });
-  test("POST /servers/:serverID/users/:userID/unmute", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/unmute", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/unmute`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/unmute`)
       .send({})
       .expect(403)
       .then((response) => response.body.command === "unmute");
   });
-  test("POST /servers/:serverID/users/:userID/deafen", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/deafen", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/deafen`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/deafen`)
       .send({})
       .expect(403)
       .then((response) => response.body.command === "deafen");
   });
-  test("POST /servers/:serverID/users/:userID/undeafen", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/undeafen", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/undeafen`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/undeafen`)
       .send({})
       .expect(403)
       .then((response) => response.body.command === "undeafen");
   });
-  test("POST /servers/:serverID/users/:userID/invalid", async () => {
+  test("POST /servers/:serverID/channels/:channelID/users/:userID/invalid", async () => {
     await supertest(app)
-      .post(`/servers/${MOCK_SERVER_ID}/users/1/invalid`)
+      .post(`/servers/${MOCK_SERVER_ID}/channels/${MOCK_CHANNEL_ID}/users/1/invalid`)
       .send({})
       .expect(404);
   });
