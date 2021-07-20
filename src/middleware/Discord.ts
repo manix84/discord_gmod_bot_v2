@@ -53,13 +53,14 @@ export class DiscordMiddleware {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
           if (!member.voice.serverMute) {
             member.voice.setMute(true, reason).then(() => {
-              success("[Discord:Mute][Success]", `${member.displayName} <@${discordMemberID}>`);
+              success("[Discord:Mute][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
             }).catch((err) => {
               error("[Discord:Mute][Error]", `${discordMemberID} - ${err}`);
               reject({ error: { code: err.code, message: err.message }});
             });
           } else {
+            success("[Discord:Mute][Success]", `${member.displayName} (${discordMemberID}`);
             resolve({ success: true });
           }
         }).catch((err) => {
@@ -78,13 +79,14 @@ export class DiscordMiddleware {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
           if (member.voice.serverMute) {
             member.voice.setMute(false, reason).then(() => {
-              success("[Discord:Unmute][Success]", `${member.displayName} <@${discordMemberID}>`);
+              success("[Discord:Unmute][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
             }).catch((err) => {
               error("[Discord:Unmute][Error]", `${discordMemberID} - ${err}`);
               reject({ error: { code: err.code, message: err.message }});
             });
           } else {
+            success("[Discord:Unmute][Success]", `${member.displayName} (${discordMemberID}`);
             resolve({ success: true });
           }
         }).catch((err) => {
@@ -103,13 +105,14 @@ export class DiscordMiddleware {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
           if (!member.voice.serverDeaf) {
             member.voice.setDeaf(true, reason).then(() => {
-              success("[Discord:Deafen][Success]", `${member.displayName} <@${discordMemberID}>`);
+              success("[Discord:Deafen][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
             }).catch((err) => {
               error("[Discord:Deafen][Error]", `${discordMemberID} - ${err}`);
               reject({ error: { code: err.code, message: err.message }});
             });
           } else {
+            success("[Discord:Deafen][Success]", `${member.displayName} (${discordMemberID}`);
             resolve({ success: true });
           }
         }).catch((err) => {
@@ -128,13 +131,14 @@ export class DiscordMiddleware {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
           if (member.voice.serverDeaf) {
             member.voice.setDeaf(false, reason).then(() => {
-              success("[Discord:Undeafen][Success]", `${member.displayName} <@${discordMemberID}>`);
+              success("[Discord:Undeafen][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
             }).catch((err) => {
               error("[Discord:Undeafen][Error]", `${discordMemberID} - ${err}`);
               reject({ error: { code: err.code, message: err.message }});
             });
           } else {
+            success("[Discord:Undeafen][Success]", `${member.displayName} (${discordMemberID}`);
             resolve({ success: true });
           }
         }).catch((err) => {
