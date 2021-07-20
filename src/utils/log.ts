@@ -11,30 +11,25 @@ const setDebugState = (state: boolean): void => {
   DEBUG = Boolean(state);
 };
 
-const cleanMessages = (...msgs: any) =>
-  msgs.map((val: any) =>
-    (typeof val[0] === "object") ? JSON.stringify(val[0]) : val[0]
-  );
-
 export const log = (...msgs: any): boolean | void =>
-  DEBUG && console.log(...cleanMessages(msgs));
+  DEBUG && console.log(...msgs);
 
 export const success = (...msgs: any): boolean | void =>
-  DEBUG && console.log(chalk.green(...cleanMessages(msgs)));
+  DEBUG && console.log(chalk.green(...msgs));
 
 export const warn = (...msgs: any): boolean | void =>
-  DEBUG && console.warn(chalk.yellow(...cleanMessages(msgs)));
+  DEBUG && console.warn(chalk.yellow(...msgs));
 
 export const info = (...msgs: any): boolean | void =>
-  DEBUG && console.info(chalk.blue(...cleanMessages(msgs)));
+  DEBUG && console.info(chalk.blue(...msgs));
 
 export const fail = (...msgs: any): boolean | void =>
-  DEBUG && console.log(chalk.red(...cleanMessages(msgs)));
+  DEBUG && console.log(chalk.red(...msgs));
 
 export const br = (): boolean | void =>
   DEBUG && console.log();
 
 export const error = (...msgs: any): void =>
-  console.error(chalk.red(...cleanMessages(msgs)));
+  console.error(chalk.red(...msgs));
 
 export default setDebugState;
