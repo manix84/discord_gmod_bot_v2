@@ -114,6 +114,10 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
             response
               .status(200)
               .json(generateSuccessResponse(request, res));
+          }).catch((err) => {
+            response
+              .status(400)
+              .json(generateErrorResponse(request, err));
           });
         break;
       case "unmute":
@@ -122,6 +126,10 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
             response
               .status(200)
               .json(generateSuccessResponse(request, res));
+          }).catch((err) => {
+            response
+              .status(400)
+              .json(generateErrorResponse(request, err));
           });
         break;
       case "deafen":
@@ -130,6 +138,10 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
             response
               .status(200)
               .json(generateSuccessResponse(request, res));
+          }).catch((err) => {
+            response
+              .status(400)
+              .json(generateErrorResponse(request, err));
           });
         break;
       case "undeafen":
@@ -138,6 +150,10 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
             response
               .status(200)
               .json(generateSuccessResponse(request, res));
+          }).catch((err) => {
+            response
+              .status(400)
+              .json(generateErrorResponse(request, err));
           });
         break;
     }
