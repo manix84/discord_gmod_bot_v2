@@ -51,7 +51,10 @@ export class DiscordMiddleware {
     new Promise((resolve, reject) => {
       this.guild.then(discordGuild => {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-          if (!member.voice.serverMute) {
+          if (!member.voice.channelID) {
+            error("[Discord:Mute][Error]", `${discordMemberID} - User not connected to voice channel.`);
+            reject({ error: { code: "ER_USER_MISSING", message: "User not connected to voice channel" }});
+          } else if (!member.voice.serverMute) {
             member.voice.setMute(true, reason).then(() => {
               success("[Discord:Mute][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
@@ -77,7 +80,10 @@ export class DiscordMiddleware {
     new Promise((resolve, reject) => {
       this.guild.then(discordGuild => {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-          if (member.voice.serverMute) {
+          if (!member.voice.channelID) {
+            error("[Discord:Unmute][Error]", `${discordMemberID} - User not connected to voice channel.`);
+            reject({ error: { code: "ER_USER_MISSING", message: "User not connected to voice channel" }});
+          } else if (member.voice.serverMute) {
             member.voice.setMute(false, reason).then(() => {
               success("[Discord:Unmute][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
@@ -103,7 +109,10 @@ export class DiscordMiddleware {
     new Promise((resolve, reject) => {
       this.guild.then(discordGuild => {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-          if (!member.voice.serverDeaf) {
+          if (!member.voice.channelID) {
+            error("[Discord:Deafen][Error]", `${discordMemberID} - User not connected to voice channel.`);
+            reject({ error: { code: "ER_USER_MISSING", message: "User not connected to voice channel" }});
+          } else if (!member.voice.serverDeaf) {
             member.voice.setDeaf(true, reason).then(() => {
               success("[Discord:Deafen][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
@@ -129,7 +138,10 @@ export class DiscordMiddleware {
     new Promise((resolve, reject) => {
       this.guild.then(discordGuild => {
         discordGuild.members.fetch(`${discordMemberID}`).then((member) => {
-          if (member.voice.serverDeaf) {
+          if (!member.voice.channelID) {
+            error("[Discord:Undeafen][Error]", `${discordMemberID} - User not connected to voice channel.`);
+            reject({ error: { code: "ER_USER_MISSING", message: "User not connected to voice channel" }});
+          } else if (member.voice.serverDeaf) {
             member.voice.setDeaf(false, reason).then(() => {
               success("[Discord:Undeafen][Success]", `${member.displayName} (${discordMemberID})`);
               resolve({ success: true });
