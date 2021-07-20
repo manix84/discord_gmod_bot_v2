@@ -164,17 +164,58 @@ app.post("/servers/:serverID/users/:steamUserID/:action", async (request, respon
   }
 });
 
-app.get("/", (_request, response) => {
-  response
-    .status(203)
-    .send();
-});
+// // POST /servers/<uid>/users/<uid>/link 200 | 403 | 404
+// app.post("/servers/:serverID/channels/:channelID/:action", async (request, response) => {
+//   const { serverID, channelID, action } = request.params;
+//   const { authorization } = request.headers;
+//   const { reason } = request.body;
+//   const validActions = ["mute", "unmute", "deafen", "undeafen"];
+//   const vettedAction = validActions.includes(action) && action;
+//   const isAuthenticated = await authenticate(authorization, serverID);
+//   if (!vettedAction) {
+//     response
+//       .status(404)
+//       .send();
+//   } else if (isAuthenticated) {
+//     const discordServer = new DiscordMiddleware(serverID, channelID);
+//     switch (vettedAction) {
+//       case "unmute":
+//         discordServer.unmuteAllPlayer(reason)
+//           .then((res) => {
+//             response
+//               .status(200)
+//               .json(generateSuccessResponse(request, res));
+//           }).catch((err) => {
+//             response
+//               .status(400)
+//               .json(generateErrorResponse(request, err));
+//           });
+//         break;
+//       case "undeafen":
+//         discordServer.undeafenAllPlayer(reason)
+//           .then((res) => {
+//             response
+//               .status(200)
+//               .json(generateSuccessResponse(request, res));
+//           }).catch((err) => {
+//             response
+//               .status(400)
+//               .json(generateErrorResponse(request, err));
+//           });
+//         break;
+//     }
+//   } else {
+//     response
+//       .status(403)
+//       .send();
+//   }
+// });
 
 app.get("/invite", (_request, response) => {
   const oauth = new DiscordOauth2({
     clientId: process.env.DISCORD_CLIENT_ID,
     clientSecret: process.env.DISCORD_CLIENT_SECRET,
-    redirectUri: `https://${process.env.HOST}/callback`
+    redirectUri: `https://${process.env.HOST}/oauth_callback`
   });
 
   const url: string = oauth.generateAuthUrl({
@@ -188,12 +229,68 @@ app.get("/invite", (_request, response) => {
     .send(`
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Invite Discord Muter Bot</title>
+    <link href="/styles/invite.css" rel="stylesheet" type="text/css" />
+  </head>
   <body>
-    <a href="${url}">Invite Bot</a>
-    <pre>${url.replace(/([&?])([a-z0-9-_.~!*'();:@+$,/?#[\]]+)=/gi, "\n$1 <strong>$2</strong> = ")}</pre>
+    <div class="inviteContainer">
+      <div class="inviteBox">
+        <div class="titleContainer">
+          <div class="discordMuterIcon"></div>
+          <h1>Discord Muter</h1>
+        </div>
+        <hr />
+        <a href="${url}" class="inviteButton">Invite Bot</a>
+        <p>You need to invite the Discord Muter<br />bot into your server for it to work.</p>
+      </div>
+    </div>
   </body>
-</html>
-  `);
+  <!--
+${url.replace(/([&?])([a-z0-9-_.~!*'();:@+$,/?#[\]]+)=/gi, "\n$1 <strong>$2</strong> = ")}
+  -->
+</html>`);
+});
+app.get("/oauth_callback", (request, response) => {
+  // const { code, state, guild_id, permissions } = request.query;
+  response
+    .status(200)
+    .send(`
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Discord Muter Bot Connected!</title>
+    <link href="/styles/invite.css" rel="stylesheet" type="text/css" />
+    <link href="/styles/animated-svg.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body>
+    <div class="inviteContainer">
+      <div class="inviteBox">
+        <div class="titleContainer">
+          <div class="discordMuterIcon"></div>
+          <h1>Discord Muter</h1>
+        </div>
+        <hr />
+        <div class="svg-box">
+          <svg class="circular green-stroke">
+            <circle class="path" cx="75" cy="75" r="50" fill="none" stroke-width="5" stroke-miterlimit="10"/>
+          </svg>
+          <svg class="checkmark green-stroke">
+            <g transform="matrix(0.79961,8.65821e-32,8.39584e-32,0.79961,-489.57,-205.679)">
+              <path class="checkmark__check" fill="none" d="M616.306,283.025L634.087,300.805L673.361,261.53"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>`);
+});
+
+app.get("/", (_request, response) => {
+  response
+    .status(203)
+    .send();
 });
 
 export default app;
