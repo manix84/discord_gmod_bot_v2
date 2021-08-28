@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import Database from "../middleware/Database";
-import { error } from "./log";
+import { error, log } from "./log";
 
 const dbase = new Database();
 
@@ -14,13 +14,17 @@ export const sanitiseAuthToken = (authorisation: string): string | false => {
 };
 
 const authenticate = async (authToken?: string, serverID?: string): Promise<boolean> => {
+  log("authToken", authToken); // TODO: Remove
+  log("serverID", serverID); // TODO: Remove
   if (!authToken || !serverID) return false;
 
   const sanitisedAuthToken = sanitiseAuthToken(authToken);
+  log("sanitisedAuthToken", sanitisedAuthToken); // TODO: Remove
   if (!sanitisedAuthToken) return false;
 
   const authedServerID = await dbase.getServerID(sanitisedAuthToken)
     .catch(error);
+  log("authedServerID", authedServerID); // TODO: Remove
 
   if (authedServerID === serverID) return true;
 
