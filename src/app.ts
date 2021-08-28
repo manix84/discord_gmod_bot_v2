@@ -187,7 +187,10 @@ app.post("/servers/:serverID/channels/:channelID/users/:steamUserID/:action", as
   } else {
     response
       .status(403)
-      .send();
+      .send(generateErrorResponse(request, {
+        code: "INVALID_AUTH_TOKEN",
+        message: "Invalid Auth Token"
+      }));
   }
 });
 
