@@ -65,7 +65,7 @@ export class DiscordMiddleware {
               reject({ code: err.code, message: err.message });
             });
           } else {
-            success("[Discord:Mute][Success]", `${member.displayName} (${discordMemberID}`);
+            success("[Discord:Mute][Success]", `${member.displayName} (${discordMemberID})`);
             resolve({ success: true });
           }
         }).catch((err) => {
@@ -94,7 +94,7 @@ export class DiscordMiddleware {
               reject({ code: err.code, message: err.message });
             });
           } else {
-            success("[Discord:Unmute][Success]", `${member.displayName} (${discordMemberID}`);
+            success("[Discord:Unmute][Success]", `${member.displayName} (${discordMemberID})`);
             resolve({ success: true });
           }
         }).catch((err) => {
@@ -123,7 +123,7 @@ export class DiscordMiddleware {
               reject({ code: err.code, message: err.message });
             });
           } else {
-            success("[Discord:Deafen][Success]", `${member.displayName} (${discordMemberID}`);
+            success("[Discord:Deafen][Success]", `${member.displayName} (${discordMemberID})`);
             resolve({ success: true });
           }
         }).catch((err) => {
@@ -152,7 +152,7 @@ export class DiscordMiddleware {
               reject({ code: err.code, message: err.message });
             });
           } else {
-            success("[Discord:Undeafen][Success]", `${member.displayName} (${discordMemberID}`);
+            success("[Discord:Undeafen][Success]", `${member.displayName} (${discordMemberID})`);
             resolve({ success: true });
           }
         }).catch((err) => {
